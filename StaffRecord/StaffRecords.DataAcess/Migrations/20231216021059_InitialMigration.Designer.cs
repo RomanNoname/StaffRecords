@@ -12,7 +12,7 @@ using StaffRecords.DataAcess;
 namespace StaffRecords.DataAcess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231216013726_InitialMigration")]
+    [Migration("20231216021059_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace StaffRecords.DataAcess.Migrations
 
             modelBuilder.Entity("StraffRecords.Domain.Entities.Appointment", b =>
                 {
-                    b.Property<Guid>("AppointmentId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -36,14 +36,20 @@ namespace StaffRecords.DataAcess.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.HasKey("AppointmentId");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("StraffRecords.Domain.Entities.Company", b =>
                 {
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -57,30 +63,42 @@ namespace StaffRecords.DataAcess.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.HasKey("CompanyId");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("StraffRecords.Domain.Entities.Department", b =>
                 {
-                    b.Property<Guid>("DepartmentId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
-                    b.HasKey("DepartmentId");
+                    b.HasKey("Id");
 
                     b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("StraffRecords.Domain.Entities.Employee", b =>
                 {
-                    b.Property<Guid>("EmployeeId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -95,7 +113,13 @@ namespace StaffRecords.DataAcess.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("DepartmentId")
@@ -126,7 +150,7 @@ namespace StaffRecords.DataAcess.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(15,2)");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
 

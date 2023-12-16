@@ -1,10 +1,7 @@
-﻿using StraffRecords.Domain.Falidation;
-
-namespace StraffRecords.Domain.Entities
+﻿namespace StraffRecords.Domain.Entities
 {
-    public class Employee
+    public class Employee : BaseEntity
     {
-        public Guid EmployeeId { get; set; } = Guid.NewGuid();
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Patronymic { get; set; }

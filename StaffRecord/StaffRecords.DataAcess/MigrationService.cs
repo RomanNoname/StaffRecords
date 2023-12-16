@@ -92,9 +92,9 @@ namespace StaffRecords.DataAcess
         }
         private async Task SeedEmployeesAsync(ApplicationDbContext context, CancellationToken stoppingToken)
         {
-            var companieGuids = context.Companies.Select(x => x.CompanyId).ToList();
-            var deparmentGuids = context.Departments.Select(x => x.DepartmentId).ToList();
-            var appointmentGuids = context.Appointments.Select(x => x.AppointmentId).ToList();
+            var companieGuids = context.Companies.Select(x => x.Id).ToList();
+            var deparmentGuids = context.Departments.Select(x => x.Id).ToList();
+            var appointmentGuids = context.Appointments.Select(x => x.Id).ToList();
 
 
             var employees = new List<Employee>();
