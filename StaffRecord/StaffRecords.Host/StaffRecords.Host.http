@@ -1,0 +1,6 @@
+@StaffRecords.Host_HostAddress = http://localhost:5261
+
+GET {{StaffRecords.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
