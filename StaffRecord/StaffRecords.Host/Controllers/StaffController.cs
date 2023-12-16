@@ -1,6 +1,9 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StaffRecords.DataAcess;
 using StraffRecords.Domain.Entities;
+using StraffRecords.Domain.Requests.Employees;
+using StraffRecords.Domain.Responces.Employees;
 
 namespace StaffRecords.Host.Controllers
 {
@@ -8,22 +11,23 @@ namespace StaffRecords.Host.Controllers
     [Route("[controller]")]
     public class StaffController : ControllerBase
     {
-      
+
 
         private readonly ILogger<StaffController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IMediator _mediator;
 
-        public StaffController(ILogger<StaffController> logger, ApplicationDbContext application)
+        public StaffController(ILogger<StaffController> logger, ApplicationDbContext application, IMediator mediator)
         {
             _logger = logger;
-
+            _mediator = mediator;
             _context = application;
         }
 
         [HttpGet]
-        public IEnumerable<Employee> Get()
+        public async Task<GetAllEmployeeResponse> Get()
         {
-          return _context.Employees;
+            return await _mediator.Send(new GetAllEmployeeRequest());
         }
     }
 }

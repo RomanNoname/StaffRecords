@@ -6,7 +6,7 @@ namespace StaffRecords.Repository.Implementation.Repositories
 {
     public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     {
-        protected EmployeeRepository(ApplicationDbContext context) : base(context)
+        public EmployeeRepository(ApplicationDbContext context) : base(context)
         {
         }
     }

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StaffRecords.DataAcess\StaffRecords.DataAcess.csproj" />
+    <ProjectReference Include="..\StaffRecords.Repository.Contracts\StaffRecords.Repository.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

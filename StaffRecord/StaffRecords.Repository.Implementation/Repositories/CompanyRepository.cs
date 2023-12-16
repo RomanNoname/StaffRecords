@@ -5,9 +5,9 @@ using StraffRecords.Domain.Entities;
 
 namespace StaffRecords.Repository.Implementation.Repositories
 {
-    public class CompanyRepositories : RepositoryBase<Company>, ICompanyRepository
+    public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
-        protected CompanyRepositories(ApplicationDbContext context) : base(context)
+        public CompanyRepository(ApplicationDbContext context) : base(context)
         {
         }
     }

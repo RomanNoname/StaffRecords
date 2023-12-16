@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using StaffRecords.DataAcess;
+using StaffRecords.Handlers;
+using StaffRecords.Repository.Contracts.IRepositories;
+using StaffRecords.Repository.Implementation.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHostedService<MigrationsService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(HandlersAssemblyMarker).Assembly));
+
 
 var app = builder.Build();
 
