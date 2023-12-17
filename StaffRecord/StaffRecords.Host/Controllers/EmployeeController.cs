@@ -7,12 +7,12 @@ namespace StaffRecords.Host.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StaffController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
 
         private readonly IMediator _mediator;
 
-        public StaffController(IMediator mediator)
+        public EmployeeController(IMediator mediator)
         {
             _mediator = mediator;
         }

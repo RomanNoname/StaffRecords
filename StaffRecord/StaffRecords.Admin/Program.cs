@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Components;
 using StaffRecords.Admin.Components;
+using StaffRecords.Admin.Requests;
+using StaffRecords.Admin.Requests.Interfaces;
+using StaffRecords.Frontend.Shared.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,13 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-var app = builder.Build();
 
+builder.Services.AddHttpClient("Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["BaseAddresses:ApiBaseUrl"]!);
+});
+builder.Services.AddScoped<IHttpApiRequests, HttpRequests>(
+    serviceProvider => new HttpRequests(
+            factory: serviceProvider.GetRequiredService<IHttpClientFactory>(),
+            navManager: serviceProvider.GetRequiredService<NavigationManager>(),
+            clientName: "Api")
+    );
+
+builder.Services.AddScoped<IEmployeeRequests, EmployeeRequests>();
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
