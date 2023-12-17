@@ -3,7 +3,5 @@ using StraffRecords.Domain.Responces.Employees;
 
 namespace StraffRecords.Domain.Requests.Employees
 {
-    public class GetAllEmployeeRequest : IRequest<GetAllEmployeeResponse>
-    {
-    }
+    public record class GetAllEmployeeRequest() : IRequest<IEnumerable<GetEmployeeResponse>>;
 }

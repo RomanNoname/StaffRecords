@@ -1,20 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using StaffRecords.Repository.Contracts.IRepositories;
 using StraffRecords.Domain.Requests.Employees;
 using StraffRecords.Domain.Responces.Employees;
 
 namespace StaffRecords.Handlers.EmployeesHandlers
 {
-    public class GetAllEmployeeHandler : IRequestHandler<GetAllEmployeeRequest, GetAllEmployeeResponse>
+    public class GetAllEmployeeHandler : IRequestHandler<GetAllEmployeeRequest, IEnumerable<GetEmployeeResponse>>
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public GetAllEmployeeHandler(IEmployeeRepository employeeRepository)
+        private readonly IMapper _mapper;
+        public GetAllEmployeeHandler(IEmployeeRepository employeeRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _mapper = mapper;
         }
-        public Task<GetAllEmployeeResponse> Handle(GetAllEmployeeRequest request, CancellationToken cancellationToken)
+        public Task<IEnumerable<GetEmployeeResponse>> Handle(GetAllEmployeeRequest request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new GetAllEmployeeResponse(_employeeRepository.GetAll().ToList()));
+            var result = _employeeRepository.GetAll().ToList();
+
+            return Task.FromResult(_mapper.Map<IEnumerable<GetEmployeeResponse>>(result));
         }
     }
 }
