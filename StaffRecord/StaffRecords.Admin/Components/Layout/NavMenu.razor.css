@@ -8,7 +8,7 @@
     top: 0.5rem;
     right: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
+    background:dth='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
 }
 
 .navbar-toggler:checked {
@@ -49,6 +49,7 @@
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
+  
 }
 
     .nav-item:first-of-type {
@@ -69,11 +70,13 @@
         align-items: center;
         line-height: 3rem;
         width: 100%;
+        color: black !important;
+        font-size: 20px;
     }
 
 .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.37);
-    color: white;
+    color: white !important;
 }
 
 .nav-item ::deep .nav-link:hover {
@@ -97,9 +100,10 @@
     .nav-scrollable {
         /* Never collapse the sidebar for wide screens */
         display: block;
-
         /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
+        background-color: rgb(255,197,37);
+       color: rgb(0,0,255);
     }
 }

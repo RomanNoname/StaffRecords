@@ -49,3 +49,18 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+.column-spacing {
+    padding-right: 25px;
+}
+.mud-table-head {
+    border-bottom: 2px solid #ffdb00 !important;
+  
+}
+tr {
+    border-bottom: 2px solid #929292 !important;
+}
+.navbar
+{
+    background-color: black !important;
+    color: white;
+}

@@ -23,6 +23,7 @@ builder.Services.AddScoped<IHttpApiRequests, HttpRequests>(
     );
 
 builder.Services.AddScoped<IEmployeeRequests, EmployeeRequests>();
+builder.Services.AddScoped<ICompanyRequests, CompanyRequests>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

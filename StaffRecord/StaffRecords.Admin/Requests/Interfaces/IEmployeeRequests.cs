@@ -4,6 +4,6 @@ namespace StaffRecords.Admin.Requests.Interfaces
 {
     public interface IEmployeeRequests
     {
-        public Task<IEnumerable<EmployeeDTO>> GetAllEmployeeAsync();
+        public Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync();
     }
 }

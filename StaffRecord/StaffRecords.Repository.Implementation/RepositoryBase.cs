@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
 using StaffRecords.DataAcess;
 using StaffRecords.Repository.Contracts;
 using StraffRecords.Domain.Entities;
-using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace StaffRecords.Repository.Implementation
 {
@@ -16,34 +17,38 @@ namespace StaffRecords.Repository.Implementation
 
         protected ApplicationDbContext Context { get; }
 
-        public TEntity Create(TEntity entity)
-        {
-            Context.Add(entity);
 
-            return entity;
+        public IQueryable<TEntity> GetAll()
+        {
+            var entityType = typeof(TEntity);
+
+            var tableName = entityType.Name.Pluralize();
+            var propertyNames = entityType.GetProperties()
+                                          .Where(p =>
+                                                 p.PropertyType.IsPrimitive ||
+                                                 p.PropertyType == typeof(string) ||
+                                                 p.PropertyType == typeof(Guid) ||
+                                                 p.PropertyType == typeof(DateTime) ||
+                                                 p.PropertyType == typeof(int?) ||
+                                                 p.PropertyType == typeof(double?) ||
+                                                 p.PropertyType == typeof(decimal) ||
+                                                 p.PropertyType == typeof(float?) ||
+                                                 p.PropertyType == typeof(long?) ||
+                                                 p.PropertyType == typeof(short?) ||
+                                                 p.PropertyType == typeof(byte?) ||
+                                                 p.PropertyType == typeof(Guid?) ||
+                                                 p.PropertyType == typeof(DateTime?)
+                                           )
+                                          .Select(p => p.Name);
+
+            var selectFields = string.Join(", ", propertyNames);
+            var sqlQuery = $"SELECT {selectFields} FROM {tableName}";
+
+            var result = Context.Set<TEntity>().FromSqlInterpolated(FormattableStringFactory.Create(sqlQuery));
+
+            return result.AsQueryable();
         }
 
-        public void Delete(TEntity entity) => Context.Remove(entity);
 
-        public TEntity Update(TEntity entity)
-        {
-            Context.Update(entity);
-
-            return entity;
-        }
-
-        public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken token) =>
-            await Context.Set<TEntity>().SingleOrDefaultAsync(entity => entity.Id == id, token);
-
-        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression) =>
-            Context.Set<TEntity>().Where(expression).AsNoTracking();
-
-        public IQueryable<TEntity> GetAll() => Context.Set<TEntity>().AsNoTracking();
-
-        public async Task<List<TEntity>> CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
-        {
-            await Context.AddRangeAsync(entities, cancellationToken);
-            return entities;
-        }
     }
 }

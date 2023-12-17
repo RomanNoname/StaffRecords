@@ -17,10 +17,10 @@ namespace StaffRecords.Host.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IEnumerable<GetEmployeeResponse>> Get()
         {
-            return await _mediator.Send(new GetAllEmployeeRequest());
+            return await _mediator.Send(new GetAllEmployeesRequest());
         }
     }
 }

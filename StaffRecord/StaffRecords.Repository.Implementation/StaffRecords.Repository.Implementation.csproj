@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StaffRecords.DataAcess\StaffRecords.DataAcess.csproj" />
     <ProjectReference Include="..\StaffRecords.Repository.Contracts\StaffRecords.Repository.Contracts.csproj" />
   </ItemGroup>
