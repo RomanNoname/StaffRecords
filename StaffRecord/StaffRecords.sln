@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.Handlers", "StaffRecords.Handlers\StaffRecords.Handlers.csproj", "{C47F8B14-C5B1-4AE1-AB44-5CD8E7E2A1C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaffRecords.Frontend.Shared", "StaffRecords.Frontend.Shared\StaffRecords.Frontend.Shared.csproj", "{6BCC18AA-85EB-48EC-890B-43A8A5041DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.Frontend.Shared", "StaffRecords.Frontend.Shared\StaffRecords.Frontend.Shared.csproj", "{6BCC18AA-85EB-48EC-890B-43A8A5041DEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

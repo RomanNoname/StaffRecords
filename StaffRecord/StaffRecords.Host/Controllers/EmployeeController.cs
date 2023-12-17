@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StraffRecords.Domain.Requests.Employees;
 using StraffRecords.Domain.Responces.Employees;
+using StraffRecords.Domain.SearchString;
 
 namespace StaffRecords.Host.Controllers
 {
@@ -21,6 +22,12 @@ namespace StaffRecords.Host.Controllers
         public async Task<IEnumerable<GetEmployeeResponse>> Get()
         {
             return await _mediator.Send(new GetAllEmployeesRequest());
+        }
+
+        [HttpGet("search")]
+        public async Task<IEnumerable<GetEmployeeResponse>> Search([FromQuery] EmployeeQueryString queryString)
+        {
+            return await _mediator.Send(new GetEmployeesBySearchRequest(queryString));
         }
     }
 }

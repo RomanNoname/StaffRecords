@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StaffRecords.DataAcess\StaffRecords.DataAcess.csproj" />
+    <ProjectReference Include="..\StaffRecords.Frontend.Shared\StaffRecords.Frontend.Shared.csproj" />
     <ProjectReference Include="..\StaffRecords.Handlers\StaffRecords.Handlers.csproj" />
     <ProjectReference Include="..\StaffRecords.Repository.Implementation\StaffRecords.Repository.Implementation.csproj" />
     <ProjectReference Include="..\StraffRecords.Domain\StraffRecords.Domain.csproj" />

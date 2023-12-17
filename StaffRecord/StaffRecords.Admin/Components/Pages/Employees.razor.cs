@@ -2,6 +2,7 @@
 using StaffRecords.Admin.DTO.Company;
 using StaffRecords.Admin.DTO.Employee;
 using StaffRecords.Admin.Requests.Interfaces;
+using StraffRecords.Domain.SearchString;
 
 namespace StaffRecords.Admin.Components.Pages
 {
@@ -12,6 +13,7 @@ namespace StaffRecords.Admin.Components.Pages
 
         private IEnumerable<EmployeeDTO> _employees;
         private IEnumerable<CompanyDTO> _companies;
+        private EmployeeQueryString _employeeQueryParams = new();
 
         private bool _loading = true;
 
@@ -20,8 +22,28 @@ namespace StaffRecords.Admin.Components.Pages
             _companies = await CompanyRequests.GetAllCompaniesAsync();
             _employees = await EmployeeRequests.GetAllEmployeesAsync();
             _loading = false;
-
             StateHasChanged();
         }
+
+        private async void Search()
+        {
+            ValidateSalaries();
+            _employees = await EmployeeRequests.GetEmployeesBySearchAsync(_employeeQueryParams);
+            StateHasChanged();
+        }
+        private void ValidateSalaries()
+        {
+            if (_employeeQueryParams.SalaryFrom.HasValue && _employeeQueryParams.SalaryTo.HasValue &&
+        _employeeQueryParams.SalaryFrom > _employeeQueryParams.SalaryTo)
+            {
+
+                _employeeQueryParams.SalaryTo = _employeeQueryParams.SalaryFrom;
+            }
+
+
+                StateHasChanged();
+        }
+
+
     }
 }

@@ -1,10 +1,21 @@
 ﻿@page "/employees"
-
-@attribute [StreamRendering]
+@rendermode InteractiveServer
 
 <PageTitle>Працівники</PageTitle>
 
 <h1>Працівники</h1>
+
+<div style="display:flex; justify-content: start; align-items: center;">
+    <MudTextField Style="width: 20%;" @bind-Value="_employeeQueryParams.LastName" MaxLength="100" Label="Прізвище" Variant="Variant.Filled"></MudTextField>
+    <MudTextField Style="width: 20%;" @bind-Value="_employeeQueryParams.CompanyName" MaxLength="100" Label="Компанія" Variant="Variant.Filled"></MudTextField>
+</div>
+<div style="display:flex; justify-content: start; align-items: center;">
+    <MudTextField Style="width: 20%;" @bind-Value="_employeeQueryParams.SalaryFrom" MaxLength="100" InputType="InputType.Number" TextChanged="ValidateSalaries" Label="Зарплата ВІД" Variant="Variant.Filled"></MudTextField>
+    <MudTextField Style="width: 20%;" @bind-Value="_employeeQueryParams.SalaryTo" InputType="InputType.Number" TextChanged="ValidateSalaries" MaxLength="100" Label="Зарплата ДО" Variant="Variant.Filled" ></MudTextField>
+</div>
+<br />
+<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Search" Color="Color.Success" @onclick="Search">Пошук</MudButton>
+
 
 
 @if (_loading)
@@ -15,15 +26,15 @@ else
 {
     <MudTable Items="@_employees" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
     <HeaderContent >
-        <MudTh Class="column-spacing">First Name</MudTh>
-        <MudTh Class="column-spacing">Last Name</MudTh>
-        <MudTh Class="column-spacing">Patronymic</MudTh>
-        <MudTh Class="column-spacing">Address</MudTh>
-        <MudTh Class="column-spacing">Phone Number</MudTh>
-        <MudTh Class="column-spacing">Date of Birth</MudTh>
-        <MudTh Class="column-spacing">Hire Date</MudTh>
-        <MudTh Class="column-spacing">Salary</MudTh>
-        <MudTh Class="column-spacing">Company</MudTh>
+        <MudTh Class="column-spacing">Ім'я</MudTh>
+        <MudTh Class="column-spacing">Прізвище</MudTh>
+        <MudTh Class="column-spacing">По-батькові</MudTh>
+        <MudTh Class="column-spacing">Адреса</MudTh>
+        <MudTh Class="column-spacing">Номер телефону</MudTh>
+        <MudTh Class="column-spacing">Дата народження</MudTh>
+        <MudTh Class="column-spacing">Дата прийнятяя</MudTh>
+        <MudTh Class="column-spacing">Заробітня плата</MudTh>
+        <MudTh Class="column-spacing">Компанія</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd Class="column-spacing">@context.FirstName</MudTd>
