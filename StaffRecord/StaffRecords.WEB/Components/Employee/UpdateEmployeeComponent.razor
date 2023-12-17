@@ -1,0 +1,15 @@
+﻿
+<EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+    <MudCardContent>    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudTextField Label="Прізвище" @bind-Value="@Model.FirstName" />
+        </MudItem>
+
+    </MudGrid>
+    <br/>
+        <MudButton Type="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Оновити</MudButton>
+    </MudCardContent>
+
+</EditForm>
+

@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor.Services;
-using StaffRecords.Admin.Components;
-using StaffRecords.Admin.Requests;
-using StaffRecords.Admin.Requests.Interfaces;
 using StaffRecords.Frontend.Shared.Requests;
+using StaffRecords.WEB.Requests;
+using StaffRecords.WEB.Requests.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 
 builder.Services.AddHttpClient("Api", client =>
 {
@@ -27,23 +27,24 @@ builder.Services.AddScoped<IEmployeeRequests, EmployeeRequests>();
 builder.Services.AddScoped<ICompanyRequests, CompanyRequests>();
 builder.Services.AddScoped<IDepartmentRequests, DepartmentRequests>();
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddMudServices();
-builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseAntiforgery();
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.UseRouting();
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 app.Run();

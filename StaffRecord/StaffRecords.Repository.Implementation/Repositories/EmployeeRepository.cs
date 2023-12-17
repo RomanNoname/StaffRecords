@@ -20,6 +20,7 @@ namespace StaffRecords.Repository.Implementation.Repositories
             var tableName = entityType.Name.Pluralize();
 
             var companyTableName = typeof(Company).Name.Pluralize();
+            var departmentTableName = typeof(Department).Name.Pluralize();
 
             var propertyNames = entityType.GetProperties()
                                           .Where(p =>
@@ -39,19 +40,25 @@ namespace StaffRecords.Repository.Implementation.Repositories
                                           )
                                           .Select(p => $"{tableName}.{p.Name}");
 
-            var selectFields = string.Join(", ",  propertyNames);
+            var selectFields = string.Join(", ", propertyNames);
             var sqlQuery = $"SELECT {selectFields} FROM {tableName} " +
-                           $"INNER JOIN {companyTableName} ON {tableName}.CompanyId = {companyTableName}.Id " +
+                           $"INNER JOIN {companyTableName} ON {tableName}.{nameof(Company)}Id = {companyTableName}.Id " +
+                           $"INNER JOIN {departmentTableName} ON {tableName}.{nameof(Department)}Id = {departmentTableName}.Id " +
                            $"WHERE 1 = 1 ";
 
             if (!string.IsNullOrEmpty(queryString.LastName))
             {
-                sqlQuery += $"AND {tableName}.LastName LIKE '%{queryString.LastName}%' ";
+                sqlQuery += $"AND {tableName}.{nameof(queryString.LastName)} LIKE '%{queryString.LastName}%' ";
             }
 
             if (!string.IsNullOrEmpty(queryString.CompanyName))
             {
-                sqlQuery += $"AND {companyTableName}.CompanyName LIKE '%{queryString.CompanyName}%' ";
+                sqlQuery += $"AND {companyTableName}.{nameof(queryString.CompanyName)} LIKE '%{queryString.CompanyName}%' ";
+            }
+
+            if (!string.IsNullOrEmpty(queryString.DepartmentName))
+            {
+                sqlQuery += $"AND {departmentTableName}.{nameof(queryString.DepartmentName)} LIKE '%{queryString.DepartmentName}%' ";
             }
 
             if (queryString.SalaryFrom.HasValue)

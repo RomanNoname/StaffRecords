@@ -1,0 +1,58 @@
+﻿@page "/employees"
+
+<PageTitle>Працівники</PageTitle>
+
+<h1>Працівники</h1>
+<div class="d-flex">
+    <MudTextField @bind-Value="_employeeQueryParams.LastName" MaxLength="100" Label="Прізвище" Variant="Variant.Filled"></MudTextField>
+    <div style="width: 10%;"></div>
+    <MudTextField @bind-Value="_employeeQueryParams.CompanyName" MaxLength="100" Label="Компанія" Variant="Variant.Filled"></MudTextField>
+    <div style="width: 10%;"></div>
+    <MudTextField @bind-Value="_employeeQueryParams.DepartmentName" MaxLength="100" Label="Департамент" Variant="Variant.Filled"></MudTextField>
+</div>
+<br />
+<div>
+    <MudTextField @bind-Value="_employeeQueryParams.SalaryFrom" style="max-width: 25%;" Label="Зарплата ВІД" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
+    <MudTextField @bind-Value="_employeeQueryParams.SalaryTo" style="max-width: 25%;" Label="Зарплата ДО" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
+</div>
+<br />
+<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Search" Color="Color.Success" @onclick="Search">Пошук</MudButton>
+<br />
+<br />
+
+@if (_loading)
+{
+    <p><em>Завантаження...</em></p>
+}
+else
+{
+    <MudTable Items="@_employees" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh Class="column-spacing">Ім'я</MudTh>
+            <MudTh Class="column-spacing">Прізвище</MudTh>
+            <MudTh Class="column-spacing">По-батькові</MudTh>
+            <MudTh Class="column-spacing">Адреса</MudTh>
+            <MudTh Class="column-spacing">Номер телефону</MudTh>
+            <MudTh Class="column-spacing">Дата народження</MudTh>
+            <MudTh Class="column-spacing">Дата прийнятяя</MudTh>
+            <MudTh Class="column-spacing">Заробітня плата</MudTh>
+            <MudTh Class="column-spacing">Компанія</MudTh>
+            <MudTh Class="column-spacing">Департмент</MudTh>
+            <MudTh Class="column-spacing"></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd Class="column-spacing">@context.FirstName</MudTd>
+                <MudTd Class="column-spacing">@context.LastName</MudTd>
+                <MudTd Class="column-spacing">@context.Patronymic</MudTd>
+                <MudTd Class="column-spacing">@context.Address</MudTd>
+                <MudTd Class="column-spacing">@context.PhoneNumber</MudTd>
+                <MudTd Class="column-spacing">@context.DateOfBirth.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd Class="column-spacing">@context.HireDate.ToString("yyyy-MM-dd")</MudTd>
+                <MudTd Class="column-spacing">@context.Salary.ToString("C")</MudTd>
+                <MudTd Class="column-spacing">@_companies.FirstOrDefault(c => c.Id == @context.CompanyId)?.CompanyName</MudTd>
+                <MudTd Class="column-spacing">@_departments.FirstOrDefault(c => c.Id == @context.DepartmentId)?.DepartmentName</MudTd>
+                <MudTd Class="column-spacing"><MudButton OnClick="()=>EditEmployeeAsync(context)" EndIcon="@Icons.Material.Filled.ModeEdit" Variant="Variant.Filled" Size="Size.Small" Style="background-color: #03c04a">Редагувати</MudButton></MudTd>
+            </RowTemplate>
+        </MudTable>
+
+}

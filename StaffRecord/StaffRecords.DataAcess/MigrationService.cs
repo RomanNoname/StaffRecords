@@ -96,9 +96,8 @@ namespace StaffRecords.DataAcess
             var deparmentGuids = context.Departments.Select(x => x.Id).ToList();
             var appointmentGuids = context.Appointments.Select(x => x.Id).ToList();
 
-
             var employees = new List<Employee>();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 9; i++)
             {
                 employees.Add(new Employee()
                 {

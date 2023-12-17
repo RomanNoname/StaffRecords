@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using StaffRecords.Admin.Components.Employee;
-using StaffRecords.Admin.DTO.Company;
-using StaffRecords.Admin.DTO.Department;
-using StaffRecords.Admin.DTO.Employee;
-using StaffRecords.Admin.Requests.Interfaces;
+using StaffRecords.WEB.Components.Employee;
+using StaffRecords.WEB.DTO.Company;
+using StaffRecords.WEB.DTO.Department;
+using StaffRecords.WEB.DTO.Employee;
+using StaffRecords.WEB.Requests.Interfaces;
 using StraffRecords.Domain.SearchString;
-using static MudBlazor.CategoryTypes;
 
-namespace StaffRecords.Admin.Components.Pages
+namespace StaffRecords.WEB.Pages
 {
     public partial class Employees
     {
@@ -55,13 +54,31 @@ namespace StaffRecords.Admin.Components.Pages
             }
 
 
-                StateHasChanged();
+            StateHasChanged();
         }
         private async void EditEmployeeAsync(EmployeeDTO employeeDTO)
         {
-            Snackbar.Add("Coo", Severity.Warning);
+            var updateEmployee = new UpdateEmployeeDTO();
+
+            Mapper.Map(employeeDTO, updateEmployee);
+
+            var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true, MaxWidth = MaxWidth.Small };
+
+            var parameter = new DialogParameters
+            {
+                { "Model", updateEmployee }
+               
+            };
+
+            var dialog = await DialogService.ShowAsync<UpdateEmployeeComponent>($"Оновлення інфомрації", parameter, options);
+
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+               
+            }
+
         }
-
-
     }
 }

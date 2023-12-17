@@ -10,6 +10,7 @@ namespace StaffRecords.Repository.Implementation
         {
             services.AddScoped<ICompanyRepository,CompanyRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             return services;
         }
