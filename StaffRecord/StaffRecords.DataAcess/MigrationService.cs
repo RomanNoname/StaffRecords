@@ -22,22 +22,22 @@ namespace StaffRecords.DataAcess
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var scope = _serviceProvider.CreateScope();
-            await using var context = scope.ServiceProvider.GetService<ApplicationDbContext>()!;
-            try
-            {
-                await context.Database.MigrateAsync(stoppingToken);
-            }
-            catch (Exception e)
-            {
-                _logger.LogCritical(e, "Unhandled exceptions occurred while migrating database");
-                return;
-            }
+            //using var scope = _serviceProvider.CreateScope();
+            //await using var context = scope.ServiceProvider.GetService<ApplicationDbContext>()!;
+            //try
+            //{
+            //    await context.Database.MigrateAsync(stoppingToken);
+            //}
+            //catch (Exception e)
+            //{
+            //    _logger.LogCritical(e, "Unhandled exceptions occurred while migrating database");
+            //    return;
+            //}
 
-            await SeedDepartmentsAsync(context, stoppingToken);
-            await SeedAppointmentsAsync(context, stoppingToken);
-            await SeedCompanieAsync(context, stoppingToken);
-            await SeedEmployeesAsync(context, stoppingToken);
+            //await SeedDepartmentsAsync(context, stoppingToken);
+            //await SeedAppointmentsAsync(context, stoppingToken);
+            //await SeedCompanieAsync(context, stoppingToken);
+            //await SeedEmployeesAsync(context, stoppingToken);
 
         }
         private async Task SeedDepartmentsAsync(ApplicationDbContext context, CancellationToken stoppingToken)

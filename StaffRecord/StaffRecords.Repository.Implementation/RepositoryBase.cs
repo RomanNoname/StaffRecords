@@ -24,12 +24,8 @@ namespace StaffRecords.Repository.Implementation
             var entityType = typeof(TEntity);
 
             var tableName = entityType.Name.Pluralize();
-            var propertyNames = entityType.GetProperties()
-                               .Where(p => p.PropertyType.IsSupportedType())
-                               .Select(p => p.Name);
-
-            var selectFields = string.Join(", ", propertyNames);
-            var sqlQuery = $"SELECT {selectFields} FROM {tableName}";
+           
+            var sqlQuery = $"SELECT * FROM {tableName}";
 
             var result = Context.Set<TEntity>().FromSqlInterpolated(FormattableStringFactory.Create(sqlQuery));
 
@@ -40,12 +36,8 @@ namespace StaffRecords.Repository.Implementation
         {
             var entityType = typeof(TEntity);
             var tableName = entityType.Name.Pluralize();
-            var propertyNames = entityType.GetProperties()
-                               .Where(p => p.PropertyType.IsSupportedType())
-                               .Select(p => p.Name);
-
-            var selectFields = string.Join(", ", propertyNames);
-            var selectQuery = $"SELECT {selectFields} FROM {tableName} WHERE Id = '{id}'";
+           
+            var selectQuery = $"SELECT * FROM {tableName} WHERE Id = '{id}'";
 
             return await Context.Set<TEntity>().FromSqlRaw(selectQuery).FirstOrDefaultAsync(cancellationToken);
         }
