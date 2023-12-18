@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using StaffRecords.WEB.Components.Employee;
 using StaffRecords.WEB.DTO.Company;
@@ -7,16 +8,18 @@ using StaffRecords.WEB.DTO.Department;
 using StaffRecords.WEB.DTO.Employee;
 using StaffRecords.WEB.Requests.Interfaces;
 using StraffRecords.Domain.SearchString;
+using System.Text;
 
 namespace StaffRecords.WEB.Pages
 {
-    public partial class Employees
+    public partial class Employees : ComponentBase
     {
         [Inject] public IEmployeeRequests EmployeeRequests { get; set; } = default!;
         [Inject] public ICompanyRequests CompanyRequests { get; set; } = default!;
         [Inject] public IDepartmentRequests DepartmentRequests { get; set; } = default!;
         [Inject] public IDialogService DialogService { get; set; }
         [Inject] public ISnackbar Snackbar { get; set; } = default!;
+        [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
         [Inject] IMapper Mapper { get; set; } = default!;
 
@@ -67,7 +70,7 @@ namespace StaffRecords.WEB.Pages
             var parameter = new DialogParameters
             {
                 { "Model", updateEmployee }
-               
+
             };
 
             var dialog = await DialogService.ShowAsync<UpdateEmployeeComponent>($"Оновлення інфомрації", parameter, options);
@@ -76,9 +79,22 @@ namespace StaffRecords.WEB.Pages
 
             if (!result.Cancelled)
             {
-               
+
             }
 
+        }
+        private async Task ReportAsync()
+        {
+
+            var content = string.Join(Environment.NewLine, _employees.Select(e => $"{e.LastName},{e.Salary}"));
+            var bytes = Encoding.UTF8.GetBytes(content);
+
+           
+            var file = Convert.ToBase64String(bytes);
+            var uri = $"data:application/octet-stream;base64,{file}";
+
+          
+            await JSRuntime.InvokeVoidAsync("downloadFile", uri, "employees.txt");
         }
     }
 }

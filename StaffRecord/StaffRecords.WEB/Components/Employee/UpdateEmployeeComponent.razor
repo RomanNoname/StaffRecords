@@ -1,15 +1,14 @@
 ﻿
 <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
-    <MudCardContent>    <DataAnnotationsValidator />
-    <MudGrid>
-        <MudItem xs="12" md="6">
-            <MudTextField Label="Прізвище" @bind-Value="@Model.FirstName" />
-        </MudItem>
-
-    </MudGrid>
-    <br/>
-        <MudButton Type="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success">Оновити</MudButton>
-    </MudCardContent>
-
+    <DataAnnotationsValidator />
+    <MudDialog>
+        <DialogContent>
+            <MudTextField @bind-Value="Model.LastName" Label="Прізвище" For="@(() => Model.LastName)" Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="Model.Salary" Label="Заробітна плата" For="@(() => Model.Salary)" Variant="Variant.Text"></MudTextField>
+        </DialogContent>
+        <DialogActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Оновити</MudButton>
+            <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error">Відмінити</MudButton>
+        </DialogActions>
+    </MudDialog>
 </EditForm>
-

@@ -16,7 +16,10 @@
     <MudTextField @bind-Value="_employeeQueryParams.SalaryTo" style="max-width: 25%;" Label="Зарплата ДО" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
 </div>
 <br />
-<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Search" Color="Color.Success" @onclick="Search">Пошук</MudButton>
+<div class="d-flex">
+    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Search" Color="Color.Success" @onclick="Search">Пошук</MudButton>
+    <MudButton Style="margin-left: 25px;" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Color="Color.Warning" @onclick="ReportAsync">Звіт</MudButton>
+</div>
 <br />
 <br />
 

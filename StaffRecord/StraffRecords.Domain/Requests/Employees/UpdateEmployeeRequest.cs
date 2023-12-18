@@ -1,10 +1,14 @@
-﻿using StraffRecords.Domain.Falidation;
+﻿using MediatR;
+using StraffRecords.Domain.Falidation;
 using System.ComponentModel.DataAnnotations;
 
-namespace StaffRecords.Admin.DTO.Employee
+namespace StraffRecords.Domain.Requests.Employees
 {
-    public class UpdateEmployeeDTO
+    public class UpdateEmployeeRequest : IRequest
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         [MaxLength(FieldsValidation.Employee.FirstNameMaxLength)]
         public string FirstName { get; set; }
@@ -34,5 +38,4 @@ namespace StaffRecords.Admin.DTO.Employee
         [Required]
         public Guid AppointmentId { get; set; }
     }
-
 }

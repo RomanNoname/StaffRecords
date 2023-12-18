@@ -1,5 +1,4 @@
 ﻿using StraffRecords.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace StaffRecords.Repository.Contracts
 {
@@ -7,6 +6,8 @@ namespace StaffRecords.Repository.Contracts
         where TEntity : BaseEntity
     {
         public IQueryable<TEntity> GetAll();
+
+        public Task<TEntity?> GetByIdAsync(Guid id,CancellationToken cancellationToken);
 
     }
 }

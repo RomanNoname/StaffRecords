@@ -5,6 +5,9 @@ namespace StaffRecords.WEB.DTO.Employee
 {
     public class UpdateEmployeeDTO
     {
+        [Required] 
+        public Guid Id { get; set;}
+
         [Required]
         [MaxLength(FieldsValidation.Employee.FirstNameMaxLength)]
         public string FirstName { get; set; }

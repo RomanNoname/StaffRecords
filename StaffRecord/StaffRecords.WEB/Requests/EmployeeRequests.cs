@@ -32,7 +32,10 @@ namespace StaffRecords.WEB.Requests
             return JsonConvert.DeserializeObject<IEnumerable<EmployeeDTO>>(content)!;
         }
 
-
+        public async Task UpdateEmployeeAsync(UpdateEmployeeDTO updateEmployeeDTO)
+        {
+            await _httpApiRequests.SendPutAsyncRequest($"{_sendEnpoint}", updateEmployeeDTO);
+        }
     }
 
 }

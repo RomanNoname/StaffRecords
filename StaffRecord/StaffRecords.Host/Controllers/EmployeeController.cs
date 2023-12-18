@@ -29,5 +29,13 @@ namespace StaffRecords.Host.Controllers
         {
             return await _mediator.Send(new GetEmployeesBySearchRequest(queryString));
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateEmployeeRequest request, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(request, cancellationToken);
+
+            return Ok();
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StaffRecords.DataAcess;
 using StaffRecords.Repository.Contracts;
 using StraffRecords.Domain.Entities;
+using StraffRecords.Domain.Extensions;
 using System.Runtime.CompilerServices;
 
 namespace StaffRecords.Repository.Implementation
@@ -24,22 +25,8 @@ namespace StaffRecords.Repository.Implementation
 
             var tableName = entityType.Name.Pluralize();
             var propertyNames = entityType.GetProperties()
-                                          .Where(p =>
-                                                 p.PropertyType.IsPrimitive ||
-                                                 p.PropertyType == typeof(string) ||
-                                                 p.PropertyType == typeof(Guid) ||
-                                                 p.PropertyType == typeof(DateTime) ||
-                                                 p.PropertyType == typeof(int?) ||
-                                                 p.PropertyType == typeof(double?) ||
-                                                 p.PropertyType == typeof(decimal) ||
-                                                 p.PropertyType == typeof(float?) ||
-                                                 p.PropertyType == typeof(long?) ||
-                                                 p.PropertyType == typeof(short?) ||
-                                                 p.PropertyType == typeof(byte?) ||
-                                                 p.PropertyType == typeof(Guid?) ||
-                                                 p.PropertyType == typeof(DateTime?)
-                                           )
-                                          .Select(p => p.Name);
+                               .Where(p => p.PropertyType.IsSupportedType())
+                               .Select(p => p.Name);
 
             var selectFields = string.Join(", ", propertyNames);
             var sqlQuery = $"SELECT {selectFields} FROM {tableName}";
@@ -47,6 +34,20 @@ namespace StaffRecords.Repository.Implementation
             var result = Context.Set<TEntity>().FromSqlInterpolated(FormattableStringFactory.Create(sqlQuery));
 
             return result.AsQueryable();
+        }
+
+        public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var entityType = typeof(TEntity);
+            var tableName = entityType.Name.Pluralize();
+            var propertyNames = entityType.GetProperties()
+                               .Where(p => p.PropertyType.IsSupportedType())
+                               .Select(p => p.Name);
+
+            var selectFields = string.Join(", ", propertyNames);
+            var selectQuery = $"SELECT {selectFields} FROM {tableName} WHERE Id = '{id}'";
+
+            return await Context.Set<TEntity>().FromSqlRaw(selectQuery).FirstOrDefaultAsync(cancellationToken);
         }
 
 
