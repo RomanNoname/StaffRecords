@@ -24,11 +24,11 @@
 * Open appsettings.json and update the connection string with your SQL Server details.
 2. Click on the solution file (.sln) to open the solution in Visual Studio.
 3. Set the startup projects:
-4. Right-click on the solution in the Solution Explorer.
-5. Select "Set StartUp Projects."
-6. Choose "Multiple startup projects."
-7. Set the "Action" for StaffRecord.WEB and StaffRecord.Host to "Start."
-8. Click "OK" to save the changes.
+* Right-click on the solution in the Solution Explorer.
+* Select "Set StartUp Projects."
+* Choose "Multiple startup projects."
+* Set the "Action" for StaffRecord.WEB and StaffRecord.Host to "Start."
+* Click "OK" to save the changes.
 9. Press F5 or click "Start" to run the application.
 
 # Usage
