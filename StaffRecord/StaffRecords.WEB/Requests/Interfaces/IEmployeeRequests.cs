@@ -8,5 +8,7 @@ namespace StaffRecords.WEB.Requests.Interfaces
         public Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync();
         public Task<IEnumerable<EmployeeDTO>> GetEmployeesBySearchAsync(EmployeeQueryString employeeQueryString);
         public Task UpdateEmployeeAsync(UpdateEmployeeDTO updateEmployeeDTO);
+
+        public Task<decimal> GetEmployeesTotalSalaryAsync(EmployeeQueryString employeeQueryString);
     }
 }

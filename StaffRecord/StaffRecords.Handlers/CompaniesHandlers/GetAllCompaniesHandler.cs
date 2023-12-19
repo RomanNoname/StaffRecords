@@ -19,7 +19,7 @@ namespace StaffRecords.Handlers.CompaniesHandlers
 
         public async Task<IEnumerable<GetCompanyResponse>> Handle(GetAllCompaniesRequest request, CancellationToken cancellationToken)
         {
-            var result = await _companyRepository.GetAllAsync();
+            var result = await _companyRepository.GetAllAsync(cancellationToken);
 
             return _mapper.Map<IEnumerable<GetCompanyResponse>>(result);
         }

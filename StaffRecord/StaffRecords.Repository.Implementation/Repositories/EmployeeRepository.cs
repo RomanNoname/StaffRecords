@@ -5,6 +5,7 @@ using StaffRecords.Repository.Contracts.IRepositories;
 using StraffRecords.Domain.Entities;
 using StraffRecords.Domain.Extensions;
 using StraffRecords.Domain.SearchString;
+using System.Threading;
 using static Dapper.SqlMapper;
 
 namespace StaffRecords.Repository.Implementation.Repositories
@@ -15,62 +16,50 @@ namespace StaffRecords.Repository.Implementation.Repositories
         {
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesBySearchAsync(EmployeeQueryString queryString)
+       
+        public async Task<IEnumerable<Employee>> GetEmployeesBySearchAsync(EmployeeQueryString queryString, CancellationToken cancellationToken)
         {
+            var tableName = GetTableName<Employee>();
+            var companyTableName = GetTableName<Company>();
+            var departmentTableName = GetTableName<Department>();
 
-            var entityType = typeof(Employee);
-
-            var tableName = entityType.Name;
-            var companyTableName = typeof(Company).Name;
-            var departmentTableName = typeof(Department).Name;
-
-            var propertyNames = entityType.GetProperties()
-                .Where(p => p.PropertyType.IsSupportedType())
-                .Select(p => $"{tableName}.{p.Name}");
-
-            var selectFields = string.Join(", ", propertyNames);
-            var sqlQuery = $"Use {_connectionInfo.DatabaseName} SELECT {selectFields} FROM {tableName} " +
-                           $"INNER JOIN {companyTableName} ON {tableName}.{nameof(Employee.CompanyId)} = {companyTableName}.{nameof(Company.Id)} " +
-                           $"INNER JOIN {departmentTableName} ON {tableName}.{nameof(Employee.DepartmentId)} = {departmentTableName}.{nameof(Department.Id)} " +
-                           $"WHERE 1 = 1 ";
+            var selectFields = GetSelectFields<Employee>();
+            var baseQuery = $"USE {_connectionInfo.DatabaseName} SELECT {selectFields} FROM {tableName} " +
+                            $"INNER JOIN {companyTableName} ON {tableName}.{nameof(Employee.CompanyId)} = {companyTableName}.{nameof(Company.Id)} " +
+                            $"INNER JOIN {departmentTableName} ON {tableName}.{nameof(Employee.DepartmentId)} = {departmentTableName}.{nameof(Department.Id)} " +
+                            "WHERE 1 = 1 ";
 
             var parameters = new DynamicParameters();
-
-            if (!string.IsNullOrEmpty(queryString.LastName))
-            {
-                sqlQuery += $"AND {tableName}.{nameof(Employee.LastName)} LIKE @LastName ";
-                parameters.Add("@LastName", $"%{queryString.LastName}%");
-            }
-
-            if (!string.IsNullOrEmpty(queryString.CompanyName))
-            {
-                sqlQuery += $"AND {companyTableName}.{nameof(Company.CompanyName)} LIKE @CompanyName ";
-                parameters.Add("@CompanyName", $"%{queryString.CompanyName}%");
-            }
-
-            if (!string.IsNullOrEmpty(queryString.DepartmentName))
-            {
-                sqlQuery += $"AND {departmentTableName}.{nameof(Department.DepartmentName)} LIKE @DepartmentName ";
-                parameters.Add("@DepartmentName", $"%{queryString.DepartmentName}%");
-            }
-
-            if (queryString.SalaryFrom.HasValue)
-            {
-                sqlQuery += $"AND {tableName}.{nameof(Employee.Salary)} >= @SalaryFrom ";
-                parameters.Add("@SalaryFrom", queryString.SalaryFrom.Value);
-            }
-
-            if (queryString.SalaryTo.HasValue)
-            {
-                sqlQuery += $"AND {tableName}.{nameof(Employee.Salary)} <= @SalaryTo ";
-                parameters.Add("@SalaryTo", queryString.SalaryTo.Value);
-            }
+            var sqlQuery = ApplyFilters(baseQuery, queryString, parameters);
 
             using (var connection = new SqlConnection(_connectionInfo.ConnectionString))
             {
-                connection.Open();
-
+                await connection.OpenAsync(cancellationToken);
                 var result = await connection.QueryAsync<Employee>(sqlQuery, parameters);
+
+                return result;
+            }
+        }
+
+        public async Task<decimal> GetTotalSalaryAsync(EmployeeQueryString queryString, CancellationToken cancellationToken)
+        {
+            var tableName = GetTableName<Employee>();
+            var companyTableName = GetTableName<Company>();
+            var departmentTableName = GetTableName<Department>();
+
+            var baseQuery = $"USE {_connectionInfo.DatabaseName} SELECT SUM(Salary) FROM {tableName} " +
+                            $"INNER JOIN {companyTableName} ON {tableName}.{nameof(Employee.CompanyId)} = {companyTableName}.{nameof(Company.Id)} " +
+                            $"INNER JOIN {departmentTableName} ON {tableName}.{nameof(Employee.DepartmentId)} = {departmentTableName}.{nameof(Department.Id)} " +
+                            "WHERE 1 = 1 ";
+
+            var parameters = new DynamicParameters();
+            var sqlQuery = ApplyFilters(baseQuery, queryString, parameters);
+
+            using (var connection = new SqlConnection(_connectionInfo.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                var result = await connection.ExecuteScalarAsync<decimal>(sqlQuery, parameters);
+
                 return result;
             }
         }
@@ -93,6 +82,45 @@ namespace StaffRecords.Repository.Implementation.Repositories
 
                 await connection.ExecuteAsync(updateQuery, entity);
             }
+        }
+        private string GetTableName<T>() => typeof(T).Name;
+        private string GetSelectFields<T>() =>
+    string.Join(", ", typeof(T).GetProperties()
+                              .Where(p => p.PropertyType.IsSupportedType())
+                              .Select(p => $"{GetTableName<T>()}.{p.Name}"));
+        private string ApplyFilters(string baseQuery, EmployeeQueryString queryString, DynamicParameters parameters)
+        {
+            if (!string.IsNullOrEmpty(queryString.LastName))
+            {
+                baseQuery += $" AND {GetTableName<Employee>()}.{nameof(Employee.LastName)} LIKE @LastName ";
+                parameters.Add("@LastName", $"%{queryString.LastName}%");
+            }
+
+            if (!string.IsNullOrEmpty(queryString.CompanyName))
+            {
+                baseQuery += $" AND {GetTableName<Company>()}.{nameof(Company.CompanyName)} LIKE @CompanyName ";
+                parameters.Add("@CompanyName", $"%{queryString.CompanyName}%");
+            }
+
+            if (!string.IsNullOrEmpty(queryString.DepartmentName))
+            {
+                baseQuery += $" AND {GetTableName<Department>()}.{nameof(Department.DepartmentName)} LIKE @DepartmentName ";
+                parameters.Add("@DepartmentName", $"%{queryString.DepartmentName}%");
+            }
+
+            if (queryString.SalaryFrom.HasValue)
+            {
+                baseQuery += $" AND {GetTableName<Employee>()}.{nameof(Employee.Salary)} >= @SalaryFrom ";
+                parameters.Add("@SalaryFrom", queryString.SalaryFrom.Value);
+            }
+
+            if (queryString.SalaryTo.HasValue)
+            {
+                baseQuery += $" AND {GetTableName<Employee>()}.{nameof(Employee.Salary)} <= @SalaryTo ";
+                parameters.Add("@SalaryTo", queryString.SalaryTo.Value);
+            }
+
+            return baseQuery;
         }
 
 

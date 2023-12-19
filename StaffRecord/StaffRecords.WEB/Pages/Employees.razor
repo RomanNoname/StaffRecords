@@ -8,7 +8,7 @@
     <div style="width: 10%;"></div>
     <MudTextField @bind-Value="_employeeQueryParams.CompanyName" MaxLength="100" Label="Компанія" Variant="Variant.Filled"></MudTextField>
     <div style="width: 10%;"></div>
-    <MudTextField @bind-Value="_employeeQueryParams.DepartmentName" MaxLength="100" Label="Департамент" Variant="Variant.Filled"></MudTextField>
+    <MudTextField @bind-Value="_employeeQueryParams.DepartmentName" MaxLength="100" Label="Відділ" Variant="Variant.Filled"></MudTextField>
 </div>
 <br />
 <div>
@@ -16,9 +16,11 @@
     <MudTextField @bind-Value="_employeeQueryParams.SalaryTo" style="max-width: 25%;" Label="Зарплата ДО" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
 </div>
 <br />
-<div class="d-flex">
+<div style="display: flex; align-items: center;">
     <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Search" Color="Color.Success" @onclick="Search">Пошук</MudButton>
-    <MudButton Style="margin-left: 25px;" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Color="Color.Warning" @onclick="ReportAsync">Звіт</MudButton>
+    <MudButton Style="margin-left: 25px;" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Color="Color.Warning" @onclick="ReportAsync">Завантажити звіт</MudButton>
+    <MudButton Style="margin-left: 25px;" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Newspaper" Color="Color.Surface" @onclick="GetTotalSalaryAsync">Загальна ЗП</MudButton>
+    <MudTextField Style="margin-left: 25px; max-width: 200px;" @bind-Value="_totalSalary" Label="Загальна ЗП" ReadOnly="true" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Success" />
 </div>
 <br />
 <br />
@@ -40,7 +42,7 @@ else
             <MudTh Class="column-spacing">Дата прийнятяя</MudTh>
             <MudTh Class="column-spacing">Заробітня плата</MudTh>
             <MudTh Class="column-spacing">Компанія</MudTh>
-            <MudTh Class="column-spacing">Департмент</MudTh>
+            <MudTh Class="column-spacing">Відділ</MudTh>
             <MudTh Class="column-spacing"></MudTh>
         </HeaderContent>
         <RowTemplate>

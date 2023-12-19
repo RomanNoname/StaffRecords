@@ -19,15 +19,15 @@ namespace StaffRecords.Host.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IEnumerable<GetEmployeeResponse>> Get()
+        public async Task<IEnumerable<GetEmployeeResponse>> Get(CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new GetAllEmployeesRequest());
+            return await _mediator.Send(new GetAllEmployeesRequest(), cancellationToken);
         }
 
         [HttpGet("search")]
-        public async Task<IEnumerable<GetEmployeeResponse>> Search([FromQuery] EmployeeQueryString queryString)
+        public async Task<IEnumerable<GetEmployeeResponse>> Search([FromQuery] EmployeeQueryString queryString, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new GetEmployeesBySearchRequest(queryString));
+            return await _mediator.Send(new GetEmployeesBySearchRequest(queryString), cancellationToken);
         }
 
         [HttpPut]
@@ -36,6 +36,12 @@ namespace StaffRecords.Host.Controllers
             await _mediator.Send(request, cancellationToken);
 
             return Ok();
+        }
+
+        [HttpGet("totalSalary")]
+        public async Task<decimal> GetTotalSalary([FromQuery] EmployeeQueryString employeeQueryString, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(new GetEmployeesTotalSalaryRequest(employeeQueryString), cancellationToken);
         }
     }
 }

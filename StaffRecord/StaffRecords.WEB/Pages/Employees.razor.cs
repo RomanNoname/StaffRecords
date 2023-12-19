@@ -26,6 +26,7 @@ namespace StaffRecords.WEB.Pages
         private IEnumerable<EmployeeDTO> _employees;
         private IEnumerable<CompanyDTO> _companies;
         private IEnumerable<DeparmentDTO> _departments;
+        private decimal? _totalSalary;
 
         private EmployeeQueryString _employeeQueryParams = new();
 
@@ -56,6 +57,7 @@ namespace StaffRecords.WEB.Pages
                 _employeeQueryParams.SalaryTo = _employeeQueryParams.SalaryFrom;
             }
 
+            _totalSalary = null;
 
             StateHasChanged();
         }
@@ -80,6 +82,7 @@ namespace StaffRecords.WEB.Pages
             if (!result.Cancelled)
             {
                 _employees = await EmployeeRequests.GetEmployeesBySearchAsync(_employeeQueryParams);
+                Snackbar.Add("Оновлено!", Severity.Success);
                 StateHasChanged();
             }
 
@@ -87,15 +90,25 @@ namespace StaffRecords.WEB.Pages
         private async Task ReportAsync()
         {
 
-            var content = string.Join(Environment.NewLine, _employees.Select(e => $"{e.LastName},{e.Salary}"));
+            var content = string.Join(Environment.NewLine, _employees.Select(e => $"{_companies.FirstOrDefault(c=>c.Id==e.CompanyId)?.CompanyName.PadRight(20)}" +
+            $"{_departments.FirstOrDefault(c => c.Id == e.DepartmentId)?.DepartmentName.PadRight(15)}" +
+            $"{e.LastName.PadRight(20)}{e.FirstName.PadRight(15)}" +
+            $"{e.Salary.ToString("F2").PadRight(10)}"));
+
             var bytes = Encoding.UTF8.GetBytes(content);
 
-           
+
             var file = Convert.ToBase64String(bytes);
             var uri = $"data:application/octet-stream;base64,{file}";
 
-          
+
             await JSRuntime.InvokeVoidAsync("downloadFile", uri, "employees.txt");
+        }
+
+        private async Task GetTotalSalaryAsync()
+        {
+            _totalSalary = await EmployeeRequests.GetEmployeesTotalSalaryAsync(_employeeQueryParams);
+
         }
     }
 }

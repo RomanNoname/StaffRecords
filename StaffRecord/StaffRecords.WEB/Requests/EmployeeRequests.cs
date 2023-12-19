@@ -36,6 +36,14 @@ namespace StaffRecords.WEB.Requests
         {
             await _httpApiRequests.SendPutAsyncRequest($"{_sendEnpoint}", updateEmployeeDTO);
         }
+
+        public async Task<decimal> GetEmployeesTotalSalaryAsync(EmployeeQueryString employeeQueryString)
+        {
+            var response = await _httpApiRequests.SendGetAsyncRequest($"{_sendEnpoint}/totalSalary?{employeeQueryString.ToQueryStringWithDate()}");
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<decimal>(content)!;
+        }
     }
 
 }

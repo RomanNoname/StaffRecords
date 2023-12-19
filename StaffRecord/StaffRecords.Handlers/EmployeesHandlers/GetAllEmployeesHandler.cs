@@ -17,7 +17,7 @@ namespace StaffRecords.Handlers.EmployeesHandlers
         }
         public async Task<IEnumerable<GetEmployeeResponse>> Handle(GetAllEmployeesRequest request, CancellationToken cancellationToken)
         {
-            var result = await _employeeRepository.GetAllAsync();
+            var result = await _employeeRepository.GetAllAsync(cancellationToken);
             
             return _mapper.Map<IEnumerable<GetEmployeeResponse>>(result);
         }

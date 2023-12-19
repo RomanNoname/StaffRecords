@@ -18,7 +18,7 @@ namespace StaffRecords.Handlers.DepartmentHandlers
         }
         public async Task<IEnumerable<GetDepartmentResponse>> Handle(GetAllDepartmentsRequest request, CancellationToken cancellationToken)
         {
-            var result = await _departmentRepository.GetAllAsync();
+            var result = await _departmentRepository.GetAllAsync(cancellationToken);
 
             return _mapper.Map<IEnumerable<GetDepartmentResponse>>(result);
         }

@@ -18,9 +18,9 @@ namespace StaffRecords.Host.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IEnumerable<GetCompanyResponse>> Get()
+        public async Task<IEnumerable<GetCompanyResponse>> Get(CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new GetAllCompaniesRequest());
+            return await _mediator.Send(new GetAllCompaniesRequest(), cancellationToken);
         }
     }
 }

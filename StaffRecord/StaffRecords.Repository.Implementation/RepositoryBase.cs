@@ -15,7 +15,7 @@ namespace StaffRecords.Repository.Implementation
         {
             _connectionInfo = connectionInfo;
         }
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             var entityType = typeof(TEntity);
             var tableName = typeof(TEntity);
@@ -38,7 +38,7 @@ namespace StaffRecords.Repository.Implementation
         {
            
             var tableName = typeof(TEntity).Name;
-            //var tableName = entityType.Name.Pluralize();
+           
 
             var connectionString = _connectionInfo.ConnectionString;
 
