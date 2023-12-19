@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.Handlers", "St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.WEB", "StaffRecords.WEB\StaffRecords.WEB.csproj", "{928081FD-4731-401A-8106-C7649AE381BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.DatainItialisation", "StaffRecords.DA\StaffRecords.DatainItialisation.csproj", "{A9D00061-8816-44A2-B42F-BF9170567B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffRecords.DatainInitialisation", "StaffRecords.DA\StaffRecords.DatainInitialisation.csproj", "{A9D00061-8816-44A2-B42F-BF9170567B1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

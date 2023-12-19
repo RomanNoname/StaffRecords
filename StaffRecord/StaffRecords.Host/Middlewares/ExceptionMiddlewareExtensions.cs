@@ -9,7 +9,7 @@ namespace StaffRecords.Host.Middlewares
         {
             app.UseExceptionHandler(appError =>
             {
-                appError.Run(async context =>
+                appError.Run(context =>
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
@@ -18,7 +18,9 @@ namespace StaffRecords.Host.Middlewares
                     {
                         var errorMessage = $"INTERNAL SERVER ERROR {contextFeature.Error} {context.Response.StatusCode} ";
                         logger.LogError(errorMessage);
-}
+                    }
+
+                    return Task.CompletedTask;
                 });
             });
         }

@@ -1,8 +1,8 @@
-using StaffRecords.DataAcess;
+using StaffRecords.DataInitialisation;
 using StaffRecords.Handlers;
 using StaffRecords.Host.Middlewares;
 using StaffRecords.Repository.Implementation;
-using ConnectionInfo = StaffRecords.DatainItialisation.ConnectionInfo;
+using ConnectionInfo = StaffRecords.DataInitialisation.ConnectionInfo;
 
 var builder = WebApplication.CreateBuilder(args);
 var applicationDbContextConnectionString = builder.Configuration.GetConnectionString("ApplicationDbContext");

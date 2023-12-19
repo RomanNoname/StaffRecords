@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StaffRecords.Domain.Validation;
 
-namespace StaffRecords.DataAcess
+namespace StaffRecords.DataInitialisation
 {
     public class InitialSQLService : BackgroundService
     {
@@ -25,7 +25,10 @@ namespace StaffRecords.DataAcess
             try
             {
                 await CreatingDatabaseAsync();
-                await CreatingTablesAsync();
+                await CreatDepartmentTableAsync(stoppingToken);
+                await CreatCompanyTableAsync(stoppingToken);
+                await CreatAppointmentTableAsync(stoppingToken);
+                await CreatEmployeeTableAsync(stoppingToken);
                 await SeedDepartmentsAsync(stoppingToken);
                 await SeedAppointmentsAsync(stoppingToken);
                 await SeedCompaniesAsync(stoppingToken);
@@ -48,12 +51,52 @@ namespace StaffRecords.DataAcess
             createDatabaseCommand.CommandText = $"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '{_dataBaseName}') CREATE DATABASE {_dataBaseName}";
             createDatabaseCommand.ExecuteNonQuery();
         }
-
-        private async Task CreatingTablesAsync()
+        private async Task CreatDepartmentTableAsync(CancellationToken cancellationToken)
         {
             using var connection = new SqlConnection(_dbConnectionString);
 
-            connection.Open();
+            await connection.OpenAsync(cancellationToken);
+            using var command = connection.CreateCommand();
+            command.CommandText = $@"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Department')
+                    BEGIN
+                        CREATE TABLE {_dataBaseName}.dbo.Department (
+                            Id UNIQUEIDENTIFIER PRIMARY KEY,
+                            DepartmentName NVARCHAR(MAX),
+                            DateCreated DATETIME,
+                            DateUpdated DATETIME
+                        )
+                    END";
+            await command.ExecuteNonQueryAsync();
+
+        }
+
+        private async Task CreatCompanyTableAsync(CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
+
+            await connection.OpenAsync(cancellationToken);
+            using var command = connection.CreateCommand();
+
+            command.CommandText = $@"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Company')
+                    BEGIN
+                        CREATE TABLE {_dataBaseName}.dbo.Company (
+                            Id UNIQUEIDENTIFIER PRIMARY KEY,
+                            CompanyName NVARCHAR({FieldsValidation.Company.NameMaxLength}),
+                            CompanyAddress NVARCHAR(MAX),
+                            DateCreated DATETIME,
+                            DateUpdated DATETIME
+                        )
+                    END";
+            await command.ExecuteNonQueryAsync();
+        }
+
+        private async Task CreatAppointmentTableAsync(CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
+
+            await connection.OpenAsync(cancellationToken);
 
             using var command = connection.CreateCommand();
 
@@ -72,33 +115,14 @@ namespace StaffRecords.DataAcess
 
             await command.ExecuteNonQueryAsync();
 
+        }
 
-            command.CommandText = $@"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Company')
-                    BEGIN
-                        CREATE TABLE {_dataBaseName}.dbo.Company (
-                            Id UNIQUEIDENTIFIER PRIMARY KEY,
-                            CompanyName NVARCHAR({FieldsValidation.Company.NameMaxLength}),
-                            CompanyAddress NVARCHAR(MAX),
-                            DateCreated DATETIME,
-                            DateUpdated DATETIME
-                        )
-                    END";
-            await command.ExecuteNonQueryAsync();
+        private async Task CreatEmployeeTableAsync(CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
 
-
-            command.CommandText = $@"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Department')
-                    BEGIN
-                        CREATE TABLE {_dataBaseName}.dbo.Department (
-                            Id UNIQUEIDENTIFIER PRIMARY KEY,
-                            DepartmentName NVARCHAR(MAX),
-                            DateCreated DATETIME,
-                            DateUpdated DATETIME
-                        )
-                    END";
-            await command.ExecuteNonQueryAsync();
-
+            await connection.OpenAsync(cancellationToken);
+            using var command = connection.CreateCommand();
 
             command.CommandText = $@"
                     IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employee')
@@ -124,7 +148,6 @@ namespace StaffRecords.DataAcess
                         )
                     END";
             await command.ExecuteNonQueryAsync();
-
 
         }
 

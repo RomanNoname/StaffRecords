@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StaffRecords.DA\StaffRecords.DatainItialisation.csproj" />
+    <ProjectReference Include="..\StaffRecords.DA\StaffRecords.DatainInitialisation.csproj" />
     <ProjectReference Include="..\StaffRecords.Handlers\StaffRecords.Handlers.csproj" />
     <ProjectReference Include="..\StaffRecords.Repository.Implementation\StaffRecords.Repository.Implementation.csproj" />
     <ProjectReference Include="..\StraffRecords.Domain\StaffRecords.Domain.csproj" />

@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
-using StaffRecords.DatainItialisation;
-using StaffRecords.Repository.Contracts;
+using StaffRecords.DataInitialisation;
 using StaffRecords.Domain.Entities;
+using StaffRecords.Repository.Contracts;
 
 namespace StaffRecords.Repository.Implementation
 {
@@ -22,34 +22,34 @@ namespace StaffRecords.Repository.Implementation
 
             var connectionString = _connectionInfo.ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(connectionString);
 
-                var sqlQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName.Name}";
+            await connection.OpenAsync(cancellationToken);
 
-                var entities = await connection.QueryAsync<TEntity>(sqlQuery);
+            var sqlQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName.Name}";
 
-                return entities;
-            }
+            var entities = await connection.QueryAsync<TEntity>(sqlQuery);
+
+            return entities;
+
         }
 
         public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var tableName = typeof(TEntity).Name;
-           
+
             var connectionString = _connectionInfo.ConnectionString;
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(connectionString);
 
-                var selectQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName} WHERE Id = @Id";
+            await connection.OpenAsync(cancellationToken);
 
-                var entity = await connection.QueryFirstOrDefaultAsync<TEntity>(selectQuery, new { Id = id });
+            var selectQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName} WHERE Id = @Id";
 
-                return entity;
-            }
+            var entity = await connection.QueryFirstOrDefaultAsync<TEntity>(selectQuery, new { Id = id });
+
+            return entity;
+
         }
 
 

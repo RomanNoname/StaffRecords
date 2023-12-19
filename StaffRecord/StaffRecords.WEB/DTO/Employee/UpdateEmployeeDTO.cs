@@ -5,36 +5,36 @@ namespace StaffRecords.WEB.DTO.Employee
 {
     public class UpdateEmployeeDTO
     {
-        [Required] 
+        [Required(ErrorMessage = "Треба заповнити")]
         public Guid Id { get; set;}
 
-        [Required]
-        [MaxLength(FieldsValidation.Employee.FirstNameMaxLength)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [MaxLength(FieldsValidation.Employee.FirstNameMaxLength, ErrorMessage = $"Максимальна довжина: 30")]
         public string FirstName { get; set; }
-        [Required]
-        [MaxLength(FieldsValidation.Employee.LastNameMaxLength)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [MaxLength(FieldsValidation.Employee.LastNameMaxLength, ErrorMessage = $"Максимальна довжина: 30")]
         public string LastName { get; set; }
-        [Required]
-        [MaxLength(FieldsValidation.Employee.PatronymicMaxLength)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [MaxLength(FieldsValidation.Employee.PatronymicMaxLength, ErrorMessage = $"Максимальна довжина: 30")]
         public string Patronymic { get; set; }
-        [Required]
-        [MaxLength(FieldsValidation.Employee.AddressMaxLength)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [MaxLength(FieldsValidation.Employee.AddressMaxLength, ErrorMessage = $"Максимальна довжина: 120")]
         public string Address { get; set; }
-        [Required]
-        [MaxLength(FieldsValidation.Employee.PhoneNumberMaxLength)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [MaxLength(FieldsValidation.Employee.PhoneNumberMaxLength, ErrorMessage = $"Максимальна довжина: 13")]
         public string PhoneNumber { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Треба заповнити")]
         public DateTime DateOfBirth { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Треба заповнити")]
         public DateTime HireDate { get; set; }
-        [Required]
-        [Range(0, 200000)]
+        [Required(ErrorMessage = "Треба заповнити")]
+        [Range(0, 200000, ErrorMessage = $"Діапазон між 0 та 200 000")]
         public decimal Salary { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Треба заповнити")]
         public Guid DepartmentId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Треба заповнити")]
         public Guid CompanyId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Треба заповнити")]
         public Guid AppointmentId { get; set; }
     }
 

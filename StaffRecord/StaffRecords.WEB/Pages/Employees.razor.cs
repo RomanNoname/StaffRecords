@@ -83,6 +83,7 @@ namespace StaffRecords.WEB.Pages
             {
                 _employees = await EmployeeRequests.GetEmployeesBySearchAsync(_employeeQueryParams);
                 Snackbar.Add("Оновлено!", Severity.Success);
+                _totalSalary = null;
                 StateHasChanged();
             }
 

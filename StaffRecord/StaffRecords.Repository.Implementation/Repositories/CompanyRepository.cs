@@ -1,4 +1,4 @@
-﻿using StaffRecords.DatainItialisation;
+﻿using StaffRecords.DataInitialisation;
 using StaffRecords.Repository.Contracts.IRepositories;
 using StaffRecords.Domain.Entities;
 

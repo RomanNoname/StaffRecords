@@ -3,8 +3,8 @@
     <DataAnnotationsValidator />
     <MudDialog>
         <DialogContent>
-            <MudTextField @bind-Value="Model.LastName" Label="Прізвище" For="@(() => Model.LastName)" Variant="Variant.Text"></MudTextField>
-            <MudTextField @bind-Value="Model.Salary" Label="Заробітна плата" For="@(() => Model.Salary)" Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="Model.LastName"  MaxLength="30" Label="Прізвище" For="@(() => Model.LastName)" Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="Model.Salary" InputType="InputType.Number" min="0" max="200000" Label="Заробітна плата" For="@(() => Model.Salary)" Variant="Variant.Text"></MudTextField>
         </DialogContent>
         <DialogActions>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Оновити</MudButton>

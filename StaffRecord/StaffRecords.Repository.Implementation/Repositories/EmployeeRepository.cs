@@ -1,11 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
-using StaffRecords.DatainItialisation;
-using StaffRecords.Repository.Contracts.IRepositories;
+using StaffRecords.DataInitialisation;
 using StaffRecords.Domain.Entities;
 using StaffRecords.Domain.Extensions;
 using StaffRecords.Domain.QueryModels;
-using System.Threading;
+using StaffRecords.Repository.Contracts.IRepositories;
 using static Dapper.SqlMapper;
 
 namespace StaffRecords.Repository.Implementation.Repositories
@@ -16,7 +15,7 @@ namespace StaffRecords.Repository.Implementation.Repositories
         {
         }
 
-       
+
         public async Task<IEnumerable<Employee>> GetEmployeesBySearchAsync(EmployeeQueryString queryString, CancellationToken cancellationToken)
         {
             var tableName = GetTableName<Employee>();
@@ -32,13 +31,13 @@ namespace StaffRecords.Repository.Implementation.Repositories
             var parameters = new DynamicParameters();
             var sqlQuery = ApplyFilters(baseQuery, queryString, parameters);
 
-            using (var connection = new SqlConnection(_connectionInfo.ConnectionString))
-            {
-                await connection.OpenAsync(cancellationToken);
-                var result = await connection.QueryAsync<Employee>(sqlQuery, parameters);
+            using var connection = new SqlConnection(_connectionInfo.ConnectionString);
 
-                return result;
-            }
+            await connection.OpenAsync(cancellationToken);
+            var result = await connection.QueryAsync<Employee>(sqlQuery, parameters);
+
+            return result;
+
         }
 
         public async Task<decimal> GetTotalSalaryAsync(EmployeeQueryString queryString, CancellationToken cancellationToken)
@@ -55,13 +54,13 @@ namespace StaffRecords.Repository.Implementation.Repositories
             var parameters = new DynamicParameters();
             var sqlQuery = ApplyFilters(baseQuery, queryString, parameters);
 
-            using (var connection = new SqlConnection(_connectionInfo.ConnectionString))
-            {
-                await connection.OpenAsync(cancellationToken);
-                var result = await connection.ExecuteScalarAsync<decimal>(sqlQuery, parameters);
+            using var connection = new SqlConnection(_connectionInfo.ConnectionString);
 
-                return result;
-            }
+            await connection.OpenAsync(cancellationToken);
+            var result = await connection.ExecuteScalarAsync<decimal>(sqlQuery, parameters);
+
+            return result;
+
         }
 
         public async Task UpdateAsync(Employee entity, CancellationToken cancellationToken)
@@ -76,12 +75,12 @@ namespace StaffRecords.Repository.Implementation.Repositories
             var updateFields = string.Join(", ", propertyNames.Select(p => $"{p} = @{p}"));
             var updateQuery = $"Use {_connectionInfo.DatabaseName} UPDATE {tableName} SET {updateFields} WHERE Id = @Id";
 
-            using (var connection = new SqlConnection(_connectionInfo.ConnectionString))
-            {
-                connection.Open();
+            using var connection = new SqlConnection(_connectionInfo.ConnectionString);
 
-                await connection.ExecuteAsync(updateQuery, entity);
-            }
+            await connection.OpenAsync(cancellationToken);
+
+            await connection.ExecuteAsync(updateQuery, entity);
+
         }
         private string GetTableName<T>() => typeof(T).Name;
         private string GetSelectFields<T>() =>
