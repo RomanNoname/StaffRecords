@@ -25,6 +25,7 @@
 2. Click on the solution file (.sln) to open the solution in Visual Studio.
 3. Set the startup projects:
 * Right-click on the solution in the Solution Explorer.
+* Select "Properties"
 * Select "Set StartUp Projects."
 * Choose "Multiple startup projects."
 * Set the "Action" for StaffRecord.WEB and StaffRecord.Host to "Start."
