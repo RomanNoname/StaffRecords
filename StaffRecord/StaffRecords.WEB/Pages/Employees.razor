@@ -43,6 +43,7 @@ else
             <MudTh Class="column-spacing">Заробітня плата</MudTh>
             <MudTh Class="column-spacing">Компанія</MudTh>
             <MudTh Class="column-spacing">Відділ</MudTh>
+            <MudTh Class="column-spacing">Посада</MudTh>
             <MudTh Class="column-spacing"></MudTh>
         </HeaderContent>
         <RowTemplate>
@@ -56,6 +57,7 @@ else
                 <MudTd Class="column-spacing">@context.Salary.ToString("C")</MudTd>
                 <MudTd Class="column-spacing">@_companies.FirstOrDefault(c => c.Id == @context.CompanyId)?.CompanyName</MudTd>
                 <MudTd Class="column-spacing">@_departments.FirstOrDefault(c => c.Id == @context.DepartmentId)?.DepartmentName</MudTd>
+                <MudTd Class="column-spacing">@_appointments.FirstOrDefault(c => c.Id == @context.AppointmentId)?.AppointmentName</MudTd>
                 <MudTd Class="column-spacing"><MudButton OnClick="()=>EditEmployeeAsync(context)" EndIcon="@Icons.Material.Filled.ModeEdit" Variant="Variant.Filled" Size="Size.Small" Style="background-color: #03c04a">Редагувати</MudButton></MudTd>
             </RowTemplate>
         </MudTable>

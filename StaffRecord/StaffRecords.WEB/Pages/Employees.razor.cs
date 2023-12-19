@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using StaffRecords.Domain.QueryModels;
 using StaffRecords.WEB.Components.Employee;
+using StaffRecords.WEB.DTO.Appointment;
 using StaffRecords.WEB.DTO.Company;
 using StaffRecords.WEB.DTO.Department;
 using StaffRecords.WEB.DTO.Employee;
@@ -18,6 +19,7 @@ namespace StaffRecords.WEB.Pages
         [Inject] public ICompanyRequests CompanyRequests { get; set; } = default!;
         [Inject] public IDepartmentRequests DepartmentRequests { get; set; } = default!;
         [Inject] public IDialogService DialogService { get; set; }
+        [Inject] public IAppointmentRequests AppointmentRequests { get; set; }
         [Inject] public ISnackbar Snackbar { get; set; } = default!;
         [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
@@ -26,6 +28,7 @@ namespace StaffRecords.WEB.Pages
         private IEnumerable<EmployeeDTO> _employees;
         private IEnumerable<CompanyDTO> _companies;
         private IEnumerable<DeparmentDTO> _departments;
+        private IEnumerable<AppointmentDTO> _appointments;
         private decimal? _totalSalary;
 
         private EmployeeQueryString _employeeQueryParams = new();
@@ -37,6 +40,7 @@ namespace StaffRecords.WEB.Pages
             _companies = await CompanyRequests.GetAllCompaniesAsync();
             _employees = await EmployeeRequests.GetAllEmployeesAsync();
             _departments = await DepartmentRequests.GetAllDepartmentsAsync();
+            _appointments = await AppointmentRequests.GetAllAppointmentsAsync();
 
             _loading = false;
             StateHasChanged();
@@ -73,7 +77,8 @@ namespace StaffRecords.WEB.Pages
             {
                 { "Model", updateEmployee },
                 {"DeparmentDTOs", _departments },
-                 {"CompanyDTOs", _companies }
+                 {"CompanyDTOs", _companies },
+                  {"AppointmentDTOs", _appointments }
             };
 
             var dialog = await DialogService.ShowAsync<UpdateEmployeeComponent>($"Оновлення інфомрації", parameter, options);

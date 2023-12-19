@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using StaffRecords.WEB.DTO.Appointment;
 using StaffRecords.WEB.DTO.Company;
 using StaffRecords.WEB.DTO.Department;
 using StaffRecords.WEB.DTO.Employee;
@@ -12,6 +13,7 @@ namespace StaffRecords.WEB.Components.Employee
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
         [Parameter] public UpdateEmployeeDTO Model { get; set; }
         [Parameter] public List<DeparmentDTO> DeparmentDTOs { get; set; } = new();
+        [Parameter] public List<AppointmentDTO> AppointmentDTOs { get; set; } = new();
         [Parameter] public List<CompanyDTO> CompanyDTOs { get; set; } = new();
 
         [Inject] IEmployeeRequests EmployeeRequests { get; set; } = default!;

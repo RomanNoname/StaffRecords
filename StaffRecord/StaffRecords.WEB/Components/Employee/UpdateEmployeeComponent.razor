@@ -21,9 +21,16 @@
                     <MudSelectItem Value="@item.Id">@item.CompanyName</MudSelectItem>
                 }
             </MudSelect>
+            <MudSelect @bind-Value="Model.AppointmentId" Label="Посада" T="Guid">
+                @foreach (var item in AppointmentDTOs)
+                {
+                    <MudSelectItem Value="@item.Id">@item.AppointmentName</MudSelectItem>
+                }
+            </MudSelect>
 
         </DialogContent>
         <DialogActions>
+            <br/>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Оновити</MudButton>
             <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="Color.Error">Відмінити</MudButton>
         </DialogActions>

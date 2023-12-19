@@ -91,7 +91,7 @@ namespace StaffRecords.DataInitialisation
                     USE {_dataBaseName}
                         CREATE TABLE {_dataBaseName}.dbo.Department (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
-                            DepartmentName NVARCHAR(MAX),
+                            DepartmentName NVARCHAR({FieldsValidation.Department.NameMaxLength}) NOT NULL,
                             DateCreated DATETIME,
                             DateUpdated DATETIME)";
             await command.ExecuteNonQueryAsync();
@@ -114,8 +114,8 @@ namespace StaffRecords.DataInitialisation
                    USE {_dataBaseName}
                         CREATE TABLE {_dataBaseName}.dbo.Company (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
-                            CompanyName NVARCHAR({FieldsValidation.Company.NameMaxLength}),
-                            CompanyAddress NVARCHAR(MAX),
+                            CompanyName NVARCHAR({FieldsValidation.Company.NameMaxLength}) NOT NULL,
+                            CompanyAddress NVARCHAR({FieldsValidation.Company.AdressMaxLength}) NOT NULL,
                             DateCreated DATETIME,
                             DateUpdated DATETIME)";
             await command.ExecuteNonQueryAsync();
@@ -161,14 +161,14 @@ namespace StaffRecords.DataInitialisation
             command.CommandText = $@"
                    CREATE TABLE {_dataBaseName}.dbo.Employee (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
-                            FirstName NVARCHAR(MAX),
-                            LastName NVARCHAR(MAX),
-                            Patronymic NVARCHAR(MAX),
-                            Address NVARCHAR(MAX),
-                            PhoneNumber NVARCHAR(MAX),
-                            DateOfBirth DATETIME,
+                            FirstName NVARCHAR({FieldsValidation.Employee.FirstNameMaxLength}) NOT NULL,
+                            LastName NVARCHAR({FieldsValidation.Employee.LastNameMaxLength})  NOT NULL,
+                            Patronymic NVARCHAR({FieldsValidation.Employee.PatronymicMaxLength})  NOT NULL,
+                            Address NVARCHAR({FieldsValidation.Employee.AddressMaxLength})  NOT NULL,
+                            PhoneNumber NVARCHAR({FieldsValidation.Employee.PhoneNumberMaxLength})  NOT NULL,
+                            DateOfBirth DATETIME CHECK (DateOfBirth <= DATEADD(YEAR, -16, GETDATE())),
                             HireDate DATETIME,
-                            Salary DECIMAL,
+                            Salary DECIMAL CHECK (Salary >= {FieldsValidation.Employee.MinSalary} AND Salary <= {FieldsValidation.Employee.MaxSalary}),
                             DepartmentId UNIQUEIDENTIFIER,
                             CompanyId UNIQUEIDENTIFIER,
                             AppointmentId UNIQUEIDENTIFIER,
@@ -334,15 +334,15 @@ namespace StaffRecords.DataInitialisation
                 var employee = new StaffRecords.Domain.Entities.Employee()
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = _faker.Name.FirstName(),
-                    LastName = _faker.Name.LastName(),
-                    Patronymic = _faker.Internet.UserName(),
+                    FirstName = _faker.Name.FirstName().Replace("'", string.Empty),
+                    LastName = _faker.Name.LastName().Replace("'", string.Empty),
+                    Patronymic = _faker.Internet.UserName().Replace("'", string.Empty),
                     PhoneNumber = $"{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}1222333444",
                     Address = _faker.Address.StreetAddress(),
                     DepartmentId = deparmentGuids[_faker.Random.Int(0, deparmentGuids.Count() - 1)],
                     AppointmentId = appointmentGuids[_faker.Random.Int(0, appointmentGuids.Count() - 1)],
                     CompanyId = companyGuids[_faker.Random.Int(0, companyGuids.Count() - 1)],
-                    DateOfBirth = DateTime.UtcNow.AddYears(-_faker.Random.Int(0, 20)),
+                    DateOfBirth = DateTime.UtcNow.AddYears(-_faker.Random.Int(17, 80)),
                     HireDate = DateTime.UtcNow.AddYears(-_faker.Random.Int(0, 20)),
                     Salary = _faker.Random.Decimal(1, 200000)
                 };

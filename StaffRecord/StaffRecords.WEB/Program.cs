@@ -25,6 +25,7 @@ builder.Services.AddScoped<IHttpApiRequests, HttpRequests>(
 builder.Services.AddScoped<IEmployeeRequests, EmployeeRequests>();
 builder.Services.AddScoped<ICompanyRequests, CompanyRequests>();
 builder.Services.AddScoped<IDepartmentRequests, DepartmentRequests>();
+builder.Services.AddScoped<IAppointmentRequests, AppointmentRequests>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
