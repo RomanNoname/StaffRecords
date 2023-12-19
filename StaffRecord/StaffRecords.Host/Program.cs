@@ -1,5 +1,6 @@
 using StaffRecords.DataAcess;
 using StaffRecords.Handlers;
+using StaffRecords.Host.Middlewares;
 using StaffRecords.Repository.Implementation;
 using ConnectionInfo = StaffRecords.DatainItialisation.ConnectionInfo;
 
@@ -33,6 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.ConfigureExceptionHandler(app.Logger);
 
 app.UseHttpsRedirection();
 

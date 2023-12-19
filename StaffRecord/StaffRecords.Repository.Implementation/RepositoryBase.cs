@@ -36,10 +36,8 @@ namespace StaffRecords.Repository.Implementation
 
         public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-           
             var tableName = typeof(TEntity).Name;
            
-
             var connectionString = _connectionInfo.ConnectionString;
 
             using (var connection = new SqlConnection(connectionString))
