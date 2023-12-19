@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StaffRecords.DA\StaffRecords.DatainInitialisation.csproj" />
     <ProjectReference Include="..\StaffRecords.Repository.Contracts\StaffRecords.Repository.Contracts.csproj" />
+    <ProjectReference Include="..\StaffRecords.StaffInitialisation\StaffRecords.DataInitialisation.csproj" />
   </ItemGroup>
 
 </Project>
