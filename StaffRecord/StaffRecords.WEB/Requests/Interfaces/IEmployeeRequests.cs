@@ -1,5 +1,5 @@
 ﻿using StaffRecords.WEB.DTO.Employee;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
 
 namespace StaffRecords.WEB.Requests.Interfaces
 {

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StraffRecords.Domain.Requests.Companies;
-using StraffRecords.Domain.Responces.Companies;
+using StaffRecords.Domain.Requests.Companies;
+using StaffRecords.Domain.Responces.Companies;
 
 namespace StaffRecords.Host.Controllers
 {

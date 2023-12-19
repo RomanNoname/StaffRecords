@@ -1,4 +1,4 @@
-﻿namespace StaffRecords.WEB.Extensions.Requests
+﻿namespace StaffRecords.WEB.Requests
 {
     public interface IHttpApiRequests
     {

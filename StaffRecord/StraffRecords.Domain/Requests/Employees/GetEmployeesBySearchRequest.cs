@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using StraffRecords.Domain.Responces.Employees;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
+using StaffRecords.Domain.Responces.Employees;
 
-namespace StraffRecords.Domain.Requests.Employees
+namespace StaffRecords.Domain.Requests.Employees
 {
     public record class GetEmployeesBySearchRequest(EmployeeQueryString QueryString) : IRequest<IEnumerable<GetEmployeeResponse>>;
 }

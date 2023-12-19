@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using StaffRecords.Frontend.Shared;
-using StaffRecords.Frontend.Shared.Requests;
 using StaffRecords.WEB.DTO.Employee;
+using StaffRecords.WEB.Extensions;
 using StaffRecords.WEB.Requests.Interfaces;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
 
 namespace StaffRecords.WEB.Requests
 {
@@ -11,14 +10,16 @@ namespace StaffRecords.WEB.Requests
     {
         private readonly IHttpApiRequests _httpApiRequests;
 
-        private const string _sendEnpoint = "api/Employee";
+        private const string SendEndpoint = "api/Employee";
+
         public EmployeeRequests(IHttpApiRequests httpApiRequests)
         {
             _httpApiRequests = httpApiRequests;
         }
+
         public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync()
         {
-            var response = await _httpApiRequests.SendGetAsyncRequest($"{_sendEnpoint}/all");
+            var response = await _httpApiRequests.SendGetAsyncRequest($"{SendEndpoint}/all");
             var content = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<IEnumerable<EmployeeDTO>>(content)!;
@@ -26,7 +27,7 @@ namespace StaffRecords.WEB.Requests
 
         public async Task<IEnumerable<EmployeeDTO>> GetEmployeesBySearchAsync(EmployeeQueryString employeeQueryString)
         {
-            var response = await _httpApiRequests.SendGetAsyncRequest($"{_sendEnpoint}/search?{employeeQueryString.ToQueryStringWithDate()}");
+            var response = await _httpApiRequests.SendGetAsyncRequest($"{SendEndpoint}/search?{employeeQueryString.ToQueryStringWithDate()}");
             var content = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<IEnumerable<EmployeeDTO>>(content)!;
@@ -34,12 +35,12 @@ namespace StaffRecords.WEB.Requests
 
         public async Task UpdateEmployeeAsync(UpdateEmployeeDTO updateEmployeeDTO)
         {
-            await _httpApiRequests.SendPutAsyncRequest($"{_sendEnpoint}", updateEmployeeDTO);
+            await _httpApiRequests.SendPutAsyncRequest($"{SendEndpoint}", updateEmployeeDTO);
         }
 
         public async Task<decimal> GetEmployeesTotalSalaryAsync(EmployeeQueryString employeeQueryString)
         {
-            var response = await _httpApiRequests.SendGetAsyncRequest($"{_sendEnpoint}/totalSalary?{employeeQueryString.ToQueryStringWithDate()}");
+            var response = await _httpApiRequests.SendGetAsyncRequest($"{SendEndpoint}/totalSalary?{employeeQueryString.ToQueryStringWithDate()}");
             var content = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<decimal>(content)!;

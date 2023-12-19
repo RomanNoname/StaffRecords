@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StaffRecords.Frontend.Shared\StaffRecords.Frontend.Shared.csproj" />
-    <ProjectReference Include="..\StraffRecords.Domain\StraffRecords.Domain.csproj" />
+    <ProjectReference Include="..\StraffRecords.Domain\StaffRecords.Domain.csproj" />
   </ItemGroup>
 
 </Project>

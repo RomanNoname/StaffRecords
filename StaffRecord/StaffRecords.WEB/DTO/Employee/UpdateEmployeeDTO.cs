@@ -1,4 +1,4 @@
-﻿using StraffRecords.Domain.Falidation;
+﻿using StaffRecords.Domain.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace StaffRecords.WEB.DTO.Employee

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StraffRecords.Domain.Requests.Departments;
-using StraffRecords.Domain.Responces.Departments;
+using StaffRecords.Domain.Requests.Departments;
+using StaffRecords.Domain.Responces.Departments;
 
 namespace StaffRecords.Host.Controllers
 {

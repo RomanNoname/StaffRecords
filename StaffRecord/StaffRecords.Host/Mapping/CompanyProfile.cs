@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using StraffRecords.Domain.Entities;
-using StraffRecords.Domain.Responces.Companies;
+using StaffRecords.Domain.Entities;
+using StaffRecords.Domain.Responces.Companies;
 
 namespace StaffRecords.Host.Mapping
 {

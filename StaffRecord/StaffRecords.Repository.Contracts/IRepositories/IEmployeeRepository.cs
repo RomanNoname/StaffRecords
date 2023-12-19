@@ -1,5 +1,5 @@
-﻿using StraffRecords.Domain.Entities;
-using StraffRecords.Domain.SearchString;
+﻿using StaffRecords.Domain.Entities;
+using StaffRecords.Domain.QueryModels;
 
 namespace StaffRecords.Repository.Contracts.IRepositories
 {

@@ -2,9 +2,9 @@
 using Microsoft.Data.SqlClient;
 using StaffRecords.DatainItialisation;
 using StaffRecords.Repository.Contracts.IRepositories;
-using StraffRecords.Domain.Entities;
-using StraffRecords.Domain.Extensions;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.Entities;
+using StaffRecords.Domain.Extensions;
+using StaffRecords.Domain.QueryModels;
 using System.Threading;
 using static Dapper.SqlMapper;
 

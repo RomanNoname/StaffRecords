@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http.Json;
 
-namespace StaffRecords.WEB.Extensions.Requests
+namespace StaffRecords.WEB.Requests
 {
     public class HttpRequests : IHttpApiRequests
     {

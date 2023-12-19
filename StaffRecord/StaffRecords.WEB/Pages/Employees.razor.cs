@@ -7,7 +7,7 @@ using StaffRecords.WEB.DTO.Company;
 using StaffRecords.WEB.DTO.Department;
 using StaffRecords.WEB.DTO.Employee;
 using StaffRecords.WEB.Requests.Interfaces;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
 using System.Text;
 
 namespace StaffRecords.WEB.Pages

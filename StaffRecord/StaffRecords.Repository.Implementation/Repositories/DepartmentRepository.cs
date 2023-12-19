@@ -1,6 +1,6 @@
 ﻿using StaffRecords.DatainItialisation;
 using StaffRecords.Repository.Contracts.IRepositories;
-using StraffRecords.Domain.Entities;
+using StaffRecords.Domain.Entities;
 
 namespace StaffRecords.Repository.Implementation.Repositories
 {

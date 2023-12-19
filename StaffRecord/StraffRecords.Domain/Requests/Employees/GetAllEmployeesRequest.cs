@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using StraffRecords.Domain.Responces.Employees;
+using StaffRecords.Domain.Responces.Employees;
 
-namespace StraffRecords.Domain.Requests.Employees
+namespace StaffRecords.Domain.Requests.Employees
 {
     public record class GetAllEmployeesRequest() : IRequest<IEnumerable<GetEmployeeResponse>>;
 }

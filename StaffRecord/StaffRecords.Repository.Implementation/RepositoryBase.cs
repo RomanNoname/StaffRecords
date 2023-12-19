@@ -2,7 +2,7 @@
 using Microsoft.Data.SqlClient;
 using StaffRecords.DatainItialisation;
 using StaffRecords.Repository.Contracts;
-using StraffRecords.Domain.Entities;
+using StaffRecords.Domain.Entities;
 
 namespace StaffRecords.Repository.Implementation
 {

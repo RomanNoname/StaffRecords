@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor.Services;
-using StaffRecords.Frontend.Shared.Requests;
 using StaffRecords.WEB.Requests;
 using StaffRecords.WEB.Requests.Interfaces;
 

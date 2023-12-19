@@ -5,20 +5,20 @@ using StaffRecords.Repository.Implementation;
 using ConnectionInfo = StaffRecords.DatainItialisation.ConnectionInfo;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var applicationDbContextConnectionString = builder.Configuration.GetConnectionString("ApplicationDbContext");
+var databaseConnectionString = builder.Configuration.GetConnectionString("DataBase");
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 builder.Services.AddScoped(provider =>
 {
-    return new ConnectionInfo(builder.Configuration.GetConnectionString("ApplicationDbContext"),
-         builder.Configuration.GetConnectionString("DataBase"));
+    return new ConnectionInfo(applicationDbContextConnectionString, databaseConnectionString);
 });
-builder.Services.AddHostedService(provider => new InitialSQLService(
-    builder.Configuration.GetConnectionString("ApplicationDbContext"),
-    builder.Configuration.GetConnectionString("DataBase"),
+builder.Services.AddHostedService(provider => new InitialSQLService(applicationDbContextConnectionString, databaseConnectionString,
     provider.GetRequiredService<ILogger<InitialSQLService>>()));
 
 

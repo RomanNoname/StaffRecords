@@ -1,4 +1,4 @@
-﻿namespace StraffRecords.Domain.Entities
+﻿namespace StaffRecords.Domain.Entities
 {
     public class Employee : BaseEntity
     {

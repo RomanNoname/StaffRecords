@@ -1,4 +1,4 @@
-﻿using StraffRecords.Domain.Entities;
+﻿using StaffRecords.Domain.Entities;
 
 namespace StaffRecords.Repository.Contracts
 {

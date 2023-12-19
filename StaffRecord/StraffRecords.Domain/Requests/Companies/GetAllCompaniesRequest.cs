@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using StraffRecords.Domain.Responces.Companies;
+using StaffRecords.Domain.Responces.Companies;
 
-namespace StraffRecords.Domain.Requests.Companies
+namespace StaffRecords.Domain.Requests.Companies
 {
     public record class GetAllCompaniesRequest():IRequest<IEnumerable<GetCompanyResponse>>;
     

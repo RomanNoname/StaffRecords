@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using StaffRecords.Repository.Contracts.IRepositories;
-using StraffRecords.Domain.Requests.Departments;
-using StraffRecords.Domain.Responces.Departments;
-using StraffRecords.Domain.Responces.Employees;
+using StaffRecords.Domain.Requests.Departments;
+using StaffRecords.Domain.Responces.Departments;
+using StaffRecords.Domain.Responces.Employees;
 
 namespace StaffRecords.Handlers.DepartmentHandlers
 {

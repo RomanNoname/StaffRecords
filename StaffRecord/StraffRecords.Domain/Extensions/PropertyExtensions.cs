@@ -1,4 +1,4 @@
-﻿namespace StraffRecords.Domain.Extensions
+﻿namespace StaffRecords.Domain.Extensions
 {
     public static class PropertyExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace StraffRecords.Domain.SearchString
+﻿namespace StaffRecords.Domain.QueryModels
 {
     public class EmployeeQueryString
     {

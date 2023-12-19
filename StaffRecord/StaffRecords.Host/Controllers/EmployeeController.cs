@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StraffRecords.Domain.Requests.Employees;
-using StraffRecords.Domain.Responces.Employees;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
+using StaffRecords.Domain.Requests.Employees;
+using StaffRecords.Domain.Responces.Employees;
 
 namespace StaffRecords.Host.Controllers
 {

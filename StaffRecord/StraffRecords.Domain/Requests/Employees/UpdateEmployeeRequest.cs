@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using StraffRecords.Domain.Falidation;
+using StaffRecords.Domain.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace StraffRecords.Domain.Requests.Employees
+namespace StaffRecords.Domain.Requests.Employees
 {
-    public class UpdateEmployeeRequest : IRequest
+    public record class UpdateEmployeeRequest() : IRequest
     {
         [Required]
         public Guid Id { get; set; }

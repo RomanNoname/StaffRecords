@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using StaffRecords.Repository.Contracts.IRepositories;
-using StraffRecords.Domain.Requests.Employees;
+using StaffRecords.Domain.Requests.Employees;
 
 namespace StaffRecords.Handlers.EmployeesHandlers
 {

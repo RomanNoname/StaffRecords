@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using StaffRecords.Repository.Contracts.IRepositories;
-using StraffRecords.Domain.Requests.Companies;
-using StraffRecords.Domain.Responces.Companies;
+using StaffRecords.Domain.Requests.Companies;
+using StaffRecords.Domain.Responces.Companies;
 
 namespace StaffRecords.Handlers.CompaniesHandlers
 {

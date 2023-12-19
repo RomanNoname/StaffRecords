@@ -1,4 +1,4 @@
-﻿namespace StraffRecords.Domain.Falidation
+﻿namespace StaffRecords.Domain.Validation
 {
     public static class FieldsValidation
     {

@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using StraffRecords.Domain.SearchString;
+using StaffRecords.Domain.QueryModels;
 
-namespace StraffRecords.Domain.Requests.Employees
+namespace StaffRecords.Domain.Requests.Employees
 {
     public record class GetEmployeesTotalSalaryRequest(EmployeeQueryString EmployeeQueryString):IRequest<decimal>;
 }
