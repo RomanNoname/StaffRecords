@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StaffRecords.Domain.Entities;
 using StaffRecords.Domain.Validation;
 
 namespace StaffRecords.DataInitialisation
@@ -22,6 +23,30 @@ namespace StaffRecords.DataInitialisation
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var departments = new List<Department>() {
+
+                new Department() {DepartmentName = "HR", Id = Guid.NewGuid()},
+                  new Department() {DepartmentName = "PM", Id = Guid.NewGuid()},
+                    new Department() {DepartmentName = "Backend", Id = Guid.NewGuid()},
+                      new Department() {DepartmentName = "Frontend", Id = Guid.NewGuid()}
+            };
+
+            var companies = new List<Company>()
+            { new Company() {CompanyName = "New World", Id = Guid.NewGuid(), CompanyAddress="Poltava"},
+                  new Company() {CompanyName = "Ananas", Id = Guid.NewGuid(), CompanyAddress="Ananas"},
+                    new Company() {CompanyName = "White Tower", Id = Guid.NewGuid(), CompanyAddress="Kharkiv"},
+                      new Company() {CompanyName = "Eco", Id = Guid.NewGuid(), CompanyAddress="Kiev" }
+                    };
+
+            var appointments = new List<Appointment>()
+            { new Appointment() {AppointmentName = "Project Manager", Id = Guid.NewGuid()},
+                  new Appointment() {AppointmentName = "HR", Id = Guid.NewGuid()},
+                    new Appointment() {AppointmentName = "FullStack Developer", Id = Guid.NewGuid()},
+                      new Appointment() {AppointmentName = "JS Developer", Id = Guid.NewGuid() },
+                        new Appointment() {AppointmentName = ".NET Developer", Id = Guid.NewGuid() }
+                    };
+
+
             try
             {
                 await CreatingDatabaseAsync();
@@ -29,9 +54,9 @@ namespace StaffRecords.DataInitialisation
                 await CreatCompanyTableAsync(stoppingToken);
                 await CreatAppointmentTableAsync(stoppingToken);
                 await CreatEmployeeTableAsync(stoppingToken);
-                await SeedDepartmentsAsync(stoppingToken);
-                await SeedAppointmentsAsync(stoppingToken);
-                await SeedCompaniesAsync(stoppingToken);
+                await SeedDepartmentsAsync(stoppingToken, departments);
+                await SeedAppointmentsAsync(stoppingToken, appointments);
+                await SeedCompaniesAsync(stoppingToken, companies);
                 await SeedEmployeesAsync(stoppingToken);
             }
             catch (Exception e)
@@ -53,47 +78,56 @@ namespace StaffRecords.DataInitialisation
         }
         private async Task CreatDepartmentTableAsync(CancellationToken cancellationToken)
         {
+            if (await ExistTableAsync("Department", cancellationToken))
+            {
+                return;
+            }
+
             using var connection = new SqlConnection(_dbConnectionString);
 
             await connection.OpenAsync(cancellationToken);
             using var command = connection.CreateCommand();
             command.CommandText = $@"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Department')
-                    BEGIN
+                    USE {_dataBaseName}
                         CREATE TABLE {_dataBaseName}.dbo.Department (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
                             DepartmentName NVARCHAR(MAX),
                             DateCreated DATETIME,
-                            DateUpdated DATETIME
-                        )
-                    END";
+                            DateUpdated DATETIME)";
             await command.ExecuteNonQueryAsync();
 
         }
 
         private async Task CreatCompanyTableAsync(CancellationToken cancellationToken)
         {
+            if (await ExistTableAsync("Company", cancellationToken))
+            {
+                return;
+            }
+
             using var connection = new SqlConnection(_dbConnectionString);
 
             await connection.OpenAsync(cancellationToken);
             using var command = connection.CreateCommand();
 
             command.CommandText = $@"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Company')
-                    BEGIN
+                   USE {_dataBaseName}
                         CREATE TABLE {_dataBaseName}.dbo.Company (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
                             CompanyName NVARCHAR({FieldsValidation.Company.NameMaxLength}),
                             CompanyAddress NVARCHAR(MAX),
                             DateCreated DATETIME,
-                            DateUpdated DATETIME
-                        )
-                    END";
+                            DateUpdated DATETIME)";
             await command.ExecuteNonQueryAsync();
         }
 
         private async Task CreatAppointmentTableAsync(CancellationToken cancellationToken)
         {
+            if (await ExistTableAsync("Appointment", cancellationToken))
+            {
+                return;
+            }
+
             using var connection = new SqlConnection(_dbConnectionString);
 
             await connection.OpenAsync(cancellationToken);
@@ -102,16 +136,11 @@ namespace StaffRecords.DataInitialisation
 
             command.CommandText = $@"
                     USE {_dataBaseName}
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Appointment')
-                    BEGIN
-                        CREATE TABLE {_dataBaseName}.dbo.Appointment (
+                    CREATE TABLE {_dataBaseName}.dbo.Appointment (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
                             AppointmentName NVARCHAR({FieldsValidation.Appointment.NameMaxLength}) NOT NULL CHECK (LEN(AppointmentName) <= {FieldsValidation.Appointment.NameMaxLength}),
                             DateCreated DATETIME,
-                            DateUpdated DATETIME
-                        )
-                    END
-                    ";
+                            DateUpdated DATETIME)";
 
             await command.ExecuteNonQueryAsync();
 
@@ -119,15 +148,18 @@ namespace StaffRecords.DataInitialisation
 
         private async Task CreatEmployeeTableAsync(CancellationToken cancellationToken)
         {
+            if (await ExistTableAsync("Employee", cancellationToken))
+            {
+                return;
+            }
+
             using var connection = new SqlConnection(_dbConnectionString);
 
             await connection.OpenAsync(cancellationToken);
             using var command = connection.CreateCommand();
 
             command.CommandText = $@"
-                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Employee')
-                    BEGIN
-                        CREATE TABLE {_dataBaseName}.dbo.Employee (
+                   CREATE TABLE {_dataBaseName}.dbo.Employee (
                             Id UNIQUEIDENTIFIER PRIMARY KEY,
                             FirstName NVARCHAR(MAX),
                             LastName NVARCHAR(MAX),
@@ -145,85 +177,112 @@ namespace StaffRecords.DataInitialisation
                             FOREIGN KEY (DepartmentId) REFERENCES {_dataBaseName}.dbo.Department(Id),
                             FOREIGN KEY (CompanyId) REFERENCES {_dataBaseName}.dbo.Company(Id),
                             FOREIGN KEY (AppointmentId) REFERENCES {_dataBaseName}.dbo.Appointment(Id)
-                        )
-                    END";
+                        )";
             await command.ExecuteNonQueryAsync();
 
         }
 
-        private async Task SeedDepartmentsAsync(CancellationToken stoppingToken)
+        private async Task SeedDepartmentsAsync(CancellationToken stoppingToken, List<Department> departments)
         {
             using var connection = new SqlConnection(_dbConnectionString);
-
             await connection.OpenAsync(stoppingToken);
 
             using var command = connection.CreateCommand();
 
-            command.CommandText = $@"
-                    Use {_dataBaseName}
-                    IF NOT EXISTS (SELECT TOP(1) * FROM Department)
-                    BEGIN
-                        INSERT INTO Department (Id, DepartmentName, DateCreated, DateUpdated)
-                        VALUES
-                            (NEWID(), 'HR', GETUTCDATE(), GETUTCDATE()),
-                            (NEWID(), 'Backend', GETUTCDATE(), GETUTCDATE()),
-                            (NEWID(), 'PM', GETUTCDATE(), GETUTCDATE()),
-                            (NEWID(), 'Frontend', GETUTCDATE(), GETUTCDATE())
-                    END";
+            if (await ExistDataInTableAsync("Department", stoppingToken))
+            {
+                return;
+            }
 
-            await command.ExecuteNonQueryAsync(stoppingToken);
+            var parameters = new List<string>();
+            for (int i = 0; i < departments.Count; i++)
+            {
+                var department = departments[i];
+                parameters.Add($"(@Id{i}, @DepartmentName{i}, GETUTCDATE(), GETUTCDATE())");
 
-        }
-        private async Task SeedAppointmentsAsync(CancellationToken stoppingToken)
-        {
-            using var connection = new SqlConnection(_dbConnectionString);
 
-            await connection.OpenAsync(stoppingToken);
+                command.Parameters.AddWithValue($"@Id{i}", department.Id);
+                command.Parameters.AddWithValue($"@DepartmentName{i}", department.DepartmentName);
+            }
 
-            using var command = connection.CreateCommand();
+            var values = string.Join(",", parameters);
 
             command.CommandText = $@"
                 USE {_dataBaseName}
-                IF NOT EXISTS (SELECT TOP(1) * FROM Appointment)
-                BEGIN
-                    INSERT INTO Appointment (Id, AppointmentName, DateCreated, DateUpdated)
-                    VALUES
-                        (NEWID(), 'JS Developer', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), '.NET Developer', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'FullStack Developer', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'HR', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'Project Manager', GETUTCDATE(), GETUTCDATE())
-                END";
+               
+                    INSERT INTO Department (Id, DepartmentName, DateCreated, DateUpdated)
+                    VALUES {values}";
 
             await command.ExecuteNonQueryAsync(stoppingToken);
-
         }
 
-        private async Task SeedCompaniesAsync(CancellationToken stoppingToken)
+        private async Task SeedAppointmentsAsync(CancellationToken stoppingToken, List<Appointment> appointments)
         {
             using var connection = new SqlConnection(_dbConnectionString);
-
             await connection.OpenAsync(stoppingToken);
 
             using var command = connection.CreateCommand();
 
+            if (await ExistDataInTableAsync("Appointment", stoppingToken))
+            {
+                return;
+            }
+
+            var parameters = new List<string>();
+            for (int i = 0; i < appointments.Count; i++)
+            {
+                var appointment = appointments[i];
+                parameters.Add($"(NEWID(), @AppointmentName{i}, GETUTCDATE(), GETUTCDATE())");
+
+
+                command.Parameters.AddWithValue($"@AppointmentName{i}", appointment.AppointmentName);
+            }
+
+            var values = string.Join(",", parameters);
+
             command.CommandText = $@"
                 USE {_dataBaseName}
-                IF NOT EXISTS (SELECT TOP(1) * FROM Company)
-                BEGIN
-                    INSERT INTO Company (Id, CompanyName, CompanyAddress, DateCreated, DateUpdated)
-                    VALUES
-                        (NEWID(), 'Ananas', 'Poltava', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'ECO', 'Kyiv', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'New World', 'Kharkiv', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'White Tower', 'Dnipro', GETUTCDATE(), GETUTCDATE()),
-                        (NEWID(), 'Nice', 'Lviv', GETUTCDATE(), GETUTCDATE())
-                END";
+                INSERT INTO Appointment (Id, AppointmentName, DateCreated, DateUpdated)
+                VALUES {values}";
 
             await command.ExecuteNonQueryAsync(stoppingToken);
+
         }
 
 
+        private async Task SeedCompaniesAsync(CancellationToken stoppingToken, List<Company> companies)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
+            await connection.OpenAsync(stoppingToken);
+
+            using var command = connection.CreateCommand();
+
+            if (await ExistDataInTableAsync("Company", stoppingToken))
+            {
+                return;
+            }
+
+            var parameters = new List<string>();
+            for (int i = 0; i < companies.Count; i++)
+            {
+                var company = companies[i];
+                parameters.Add($"(NEWID(), @CompanyName{i}, @CompanyAddress{i}, GETUTCDATE(), GETUTCDATE())");
+
+
+                command.Parameters.AddWithValue($"@CompanyName{i}", company.CompanyName);
+                command.Parameters.AddWithValue($"@CompanyAddress{i}", company.CompanyAddress);
+            }
+
+            var values = string.Join(",", parameters);
+
+            command.CommandText = $@"
+                USE {_dataBaseName}
+                INSERT INTO Company (Id, CompanyName, CompanyAddress, DateCreated, DateUpdated)
+                VALUES  {values}";
+
+            await command.ExecuteNonQueryAsync(stoppingToken);
+
+        }
 
         private async Task SeedEmployeesAsync(CancellationToken stoppingToken)
         {
@@ -237,14 +296,13 @@ namespace StaffRecords.DataInitialisation
 
             using var command = connection.CreateCommand();
 
-            command.CommandText = $"USE {_dataBaseName} IF EXISTS (SELECT TOP(1) * FROM Employee) SELECT 1 ELSE SELECT 0";
-            var result = await command.ExecuteScalarAsync(stoppingToken);
-
-            if (Convert.ToInt32(result) == 1)
+            if (await ExistDataInTableAsync("Employee", stoppingToken))
+            {
                 return;
+            }
 
 
-            command.CommandText = "SELECT Id FROM Appointment";
+            command.CommandText = $"USE {_dataBaseName} SELECT Id FROM Appointment";
             using (SqlDataReader reader = await command.ExecuteReaderAsync(stoppingToken))
             {
                 while (await reader.ReadAsync(stoppingToken))
@@ -253,7 +311,7 @@ namespace StaffRecords.DataInitialisation
                 }
             }
 
-            command.CommandText = "SELECT Id FROM Company";
+            command.CommandText = $"USE {_dataBaseName} SELECT Id FROM Company";
             using (SqlDataReader reader = await command.ExecuteReaderAsync(stoppingToken))
             {
                 while (await reader.ReadAsync(stoppingToken))
@@ -262,7 +320,7 @@ namespace StaffRecords.DataInitialisation
                 }
             }
 
-            command.CommandText = "SELECT Id FROM Department";
+            command.CommandText = $"USE {_dataBaseName} SELECT Id FROM Department";
             using (SqlDataReader reader = await command.ExecuteReaderAsync(stoppingToken))
             {
                 while (await reader.ReadAsync(stoppingToken))
@@ -279,7 +337,7 @@ namespace StaffRecords.DataInitialisation
                     FirstName = _faker.Name.FirstName(),
                     LastName = _faker.Name.LastName(),
                     Patronymic = _faker.Internet.UserName(),
-                    PhoneNumber = $"{_faker.Random.Int(0, 9)}111222333444",
+                    PhoneNumber = $"{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}1222333444",
                     Address = _faker.Address.StreetAddress(),
                     DepartmentId = deparmentGuids[_faker.Random.Int(0, deparmentGuids.Count() - 1)],
                     AppointmentId = appointmentGuids[_faker.Random.Int(0, appointmentGuids.Count() - 1)],
@@ -288,7 +346,7 @@ namespace StaffRecords.DataInitialisation
                     HireDate = DateTime.UtcNow.AddYears(-_faker.Random.Int(0, 20)),
                     Salary = _faker.Random.Decimal(1, 200000)
                 };
-                command.CommandText = $@"INSERT INTO Employee (Id, FirstName, LastName, Patronymic, PhoneNumber, Address, DateOfBirth, HireDate, Salary, CompanyId, DepartmentId, AppointmentId, DateCreated, DateUpdated)
+                command.CommandText = $@"USE {_dataBaseName} INSERT INTO Employee (Id, FirstName, LastName, Patronymic, PhoneNumber, Address, DateOfBirth, HireDate, Salary, CompanyId, DepartmentId, AppointmentId, DateCreated, DateUpdated)
                         VALUES (
                             '{employee.Id}','{employee.FirstName}','{employee.LastName}','{employee.Patronymic}','{employee.PhoneNumber}',
                              '{employee.Address}','{employee.DateOfBirth.ToString("yyyy-MM-dd")}',
@@ -300,9 +358,40 @@ namespace StaffRecords.DataInitialisation
 
         }
 
+        private async Task<bool> ExistTableAsync(string tableName, CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
+
+            await connection.OpenAsync(cancellationToken);
+
+            using var command = connection.CreateCommand();
+
+            command.CommandText = $@"
+                    USE {_dataBaseName}
+                    IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = '{tableName}')
+                        SELECT 1
+                    ELSE
+                        SELECT 0";
+
+            var result = await command.ExecuteScalarAsync();
+
+            return Convert.ToInt16(result) == 1;
+
+        }
+
+        private async Task<bool> ExistDataInTableAsync(string tableName, CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_dbConnectionString);
+
+            await connection.OpenAsync(cancellationToken);
+
+            using var command = connection.CreateCommand();
+
+            command.CommandText = $"USE {_dataBaseName} IF EXISTS (SELECT TOP(1) * FROM {tableName}) SELECT 1 ELSE SELECT 0";
+            var result = await command.ExecuteScalarAsync(cancellationToken);
+
+            return Convert.ToInt16(result) == 1;
+        }
+
     }
 }
-
-
-
-

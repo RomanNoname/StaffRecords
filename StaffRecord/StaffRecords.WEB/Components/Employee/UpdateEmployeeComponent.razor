@@ -1,10 +1,27 @@
-﻿
+﻿@using StaffRecords.WEB.DTO.Department
+
 <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <MudDialog>
         <DialogContent>
+            <MudTextField @bind-Value="Model.FirstName" MaxLength="30" Label="Ім'я" For="@(() => Model.FirstName)" Variant="Variant.Text"></MudTextField>
             <MudTextField @bind-Value="Model.LastName"  MaxLength="30" Label="Прізвище" For="@(() => Model.LastName)" Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="Model.Address" MaxLength="120" Label="Адреса" For="@(() => Model.Address)" Variant="Variant.Text"></MudTextField>
             <MudTextField @bind-Value="Model.Salary" InputType="InputType.Number" min="0" max="200000" Label="Заробітна плата" For="@(() => Model.Salary)" Variant="Variant.Text"></MudTextField>
+           
+            <MudSelect @bind-Value="Model.DepartmentId" Label="Відділ" T="Guid">
+                @foreach(var item in DeparmentDTOs)
+                {
+                    <MudSelectItem Value="@item.Id" >@item.DepartmentName</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="Model.CompanyId" Label="Компанія" T="Guid">
+                @foreach (var item in CompanyDTOs)
+                {
+                    <MudSelectItem Value="@item.Id">@item.CompanyName</MudSelectItem>
+                }
+            </MudSelect>
+
         </DialogContent>
         <DialogActions>
             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Оновити</MudButton>

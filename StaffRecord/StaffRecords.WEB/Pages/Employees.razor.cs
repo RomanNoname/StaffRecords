@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using StaffRecords.Domain.QueryModels;
 using StaffRecords.WEB.Components.Employee;
 using StaffRecords.WEB.DTO.Company;
 using StaffRecords.WEB.DTO.Department;
 using StaffRecords.WEB.DTO.Employee;
 using StaffRecords.WEB.Requests.Interfaces;
-using StaffRecords.Domain.QueryModels;
 using System.Text;
 
 namespace StaffRecords.WEB.Pages
@@ -71,8 +71,9 @@ namespace StaffRecords.WEB.Pages
 
             var parameter = new DialogParameters
             {
-                { "Model", updateEmployee }
-
+                { "Model", updateEmployee },
+                {"DeparmentDTOs", _departments },
+                 {"CompanyDTOs", _companies }
             };
 
             var dialog = await DialogService.ShowAsync<UpdateEmployeeComponent>($"Оновлення інфомрації", parameter, options);
@@ -91,7 +92,8 @@ namespace StaffRecords.WEB.Pages
         private async Task ReportAsync()
         {
 
-            var content = string.Join(Environment.NewLine, _employees.Select(e => $"{_companies.FirstOrDefault(c=>c.Id==e.CompanyId)?.CompanyName.PadRight(20)}" +
+            var content = $"{"Company".PadRight(20)}{"Department".PadRight(15)}{"Last Name".PadRight(20)}{"First Name".PadRight(15)}{"Salary".PadRight(10)}\n" +
+                string.Join(Environment.NewLine, _employees.Select(e => $"{_companies.FirstOrDefault(c => c.Id == e.CompanyId)?.CompanyName.PadRight(20)}" +
             $"{_departments.FirstOrDefault(c => c.Id == e.DepartmentId)?.DepartmentName.PadRight(15)}" +
             $"{e.LastName.PadRight(20)}{e.FirstName.PadRight(15)}" +
             $"{e.Salary.ToString("F2").PadRight(10)}"));
