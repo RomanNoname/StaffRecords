@@ -7,17 +7,30 @@
 * Export to TXT: Ability to export filtered data to a text file for external use or record-keeping.
 * Tabular Display: View filtered data in a table within the application.
 
+# Prerequisites
+1. .NET 8
+2. Microsoft SQL Server
+3. Visual Studio
+
 # Installation
 1. Clone the repository:
 *git clone https://github.com/RomanNoname/StaffRecords.git*
 2. Open the project in Visual Studio (or any other compatible IDE).
 3. Change the connection string to the MS SQL database in appsettings.Development.json or in the user secretes.
 4. Build the project to restore dependencies and compile the application.
-5. Run the application.
-# Prerequisites
-1. .NET 8
-2. Microsoft SQL Server
-3. Visual Studio
+
+# Run the Application:
+1. Configure Database Connection:
+* Open appsettings.json and update the connection string with your SQL Server details.
+2. Click on the solution file (.sln) to open the solution in Visual Studio.
+3. Set the startup projects:
+4. Right-click on the solution in the Solution Explorer.
+5. Select "Set StartUp Projects."
+6. Choose "Multiple startup projects."
+7. Set the "Action" for StaffRecord.WEB and StaffRecord.Host to "Start."
+8. Click "OK" to save the changes.
+9. Press F5 or click "Start" to run the application.
+
 # Usage
 1. Menu Navigation
 Navigate through different sections of the application using the menu:
