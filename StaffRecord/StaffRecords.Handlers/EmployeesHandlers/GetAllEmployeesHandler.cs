@@ -15,11 +15,11 @@ namespace StaffRecords.Handlers.EmployeesHandlers
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
-        public Task<IEnumerable<GetEmployeeResponse>> Handle(GetAllEmployeesRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetEmployeeResponse>> Handle(GetAllEmployeesRequest request, CancellationToken cancellationToken)
         {
-            var result = _employeeRepository.GetAll();
-
-            return Task.FromResult(_mapper.Map<IEnumerable<GetEmployeeResponse>>(result));
+            var result = await _employeeRepository.GetAllAsync();
+            
+            return _mapper.Map<IEnumerable<GetEmployeeResponse>>(result);
         }
     }
 }

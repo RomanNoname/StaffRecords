@@ -79,7 +79,8 @@ namespace StaffRecords.WEB.Pages
 
             if (!result.Cancelled)
             {
-
+                _employees = await EmployeeRequests.GetEmployeesBySearchAsync(_employeeQueryParams);
+                StateHasChanged();
             }
 
         }

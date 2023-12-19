@@ -1,21 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using StaffRecords.DA;
 using StaffRecords.DataAcess;
 using StaffRecords.Handlers;
 using StaffRecords.Repository.Implementation;
+using ConnectionInfo = StaffRecords.DatainItialisation.ConnectionInfo;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(ApplicationDbContext)))
-);
 
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped(provider =>
+{
+    return new ConnectionInfo(builder.Configuration.GetConnectionString("ApplicationDbContext"),
+         builder.Configuration.GetConnectionString("DataBase"));
+});
 builder.Services.AddHostedService(provider => new InitialSQLService(
     builder.Configuration.GetConnectionString("ApplicationDbContext"),
     builder.Configuration.GetConnectionString("DataBase"),

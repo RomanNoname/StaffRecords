@@ -5,8 +5,7 @@ namespace StaffRecords.Repository.Contracts
     public interface IRepositoryBase<TEntity>
         where TEntity : BaseEntity
     {
-        public IQueryable<TEntity> GetAll();
-
+        public Task<IEnumerable<TEntity>> GetAllAsync();
         public Task<TEntity?> GetByIdAsync(Guid id,CancellationToken cancellationToken);
 
     }

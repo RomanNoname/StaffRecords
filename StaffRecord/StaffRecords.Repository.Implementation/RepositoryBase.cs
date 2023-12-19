@@ -1,45 +1,57 @@
-﻿using Humanizer;
-using Microsoft.EntityFrameworkCore;
-using StaffRecords.DataAcess;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using StaffRecords.DatainItialisation;
 using StaffRecords.Repository.Contracts;
 using StraffRecords.Domain.Entities;
-using StraffRecords.Domain.Extensions;
-using System.Runtime.CompilerServices;
 
 namespace StaffRecords.Repository.Implementation
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
      where TEntity : BaseEntity
     {
-        protected RepositoryBase(ApplicationDbContext context)
+        public readonly ConnectionInfo _connectionInfo;
+
+        public RepositoryBase(ConnectionInfo connectionInfo)
         {
-            Context = context;
+            _connectionInfo = connectionInfo;
         }
-
-        protected ApplicationDbContext Context { get; }
-
-
-        public IQueryable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             var entityType = typeof(TEntity);
+            var tableName = typeof(TEntity);
 
-            var tableName = entityType.Name.Pluralize();
-           
-            var sqlQuery = $"SELECT * FROM {tableName}";
+            var connectionString = _connectionInfo.ConnectionString;
 
-            var result = Context.Set<TEntity>().FromSqlInterpolated(FormattableStringFactory.Create(sqlQuery));
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
-            return result.AsQueryable();
+                var sqlQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName.Name}";
+
+                var entities = await connection.QueryAsync<TEntity>(sqlQuery);
+
+                return entities;
+            }
         }
 
         public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var entityType = typeof(TEntity);
-            var tableName = entityType.Name.Pluralize();
            
-            var selectQuery = $"SELECT * FROM {tableName} WHERE Id = '{id}'";
+            var tableName = typeof(TEntity).Name;
+            //var tableName = entityType.Name.Pluralize();
 
-            return await Context.Set<TEntity>().FromSqlRaw(selectQuery).FirstOrDefaultAsync(cancellationToken);
+            var connectionString = _connectionInfo.ConnectionString;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var selectQuery = $"Use {_connectionInfo.DatabaseName} SELECT * FROM {tableName} WHERE Id = @Id";
+
+                var entity = await connection.QueryFirstOrDefaultAsync<TEntity>(selectQuery, new { Id = id });
+
+                return entity;
+            }
         }
 
 

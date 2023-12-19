@@ -3,6 +3,7 @@ using MediatR;
 using StaffRecords.Repository.Contracts.IRepositories;
 using StraffRecords.Domain.Requests.Departments;
 using StraffRecords.Domain.Responces.Departments;
+using StraffRecords.Domain.Responces.Employees;
 
 namespace StaffRecords.Handlers.DepartmentHandlers
 {
@@ -15,11 +16,11 @@ namespace StaffRecords.Handlers.DepartmentHandlers
             _departmentRepository = departmentRepository;
             _mapper = mapper;
         }
-        public Task<IEnumerable<GetDepartmentResponse>> Handle(GetAllDepartmentsRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetDepartmentResponse>> Handle(GetAllDepartmentsRequest request, CancellationToken cancellationToken)
         {
-            var result = _departmentRepository.GetAll();
+            var result = await _departmentRepository.GetAllAsync();
 
-            return Task.FromResult(_mapper.Map<IEnumerable<GetDepartmentResponse>>(result));
+            return _mapper.Map<IEnumerable<GetDepartmentResponse>>(result);
         }
     }
 }

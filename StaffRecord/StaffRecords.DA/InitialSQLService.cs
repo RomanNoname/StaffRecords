@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StraffRecords.Domain.Falidation;
 
-namespace StaffRecords.DA
+namespace StaffRecords.DataAcess
 {
     public class InitialSQLService : BackgroundService
     {
@@ -256,6 +256,7 @@ namespace StaffRecords.DA
                     {
                         var employee = new StraffRecords.Domain.Entities.Employee()
                         {
+                            Id = Guid.NewGuid(),
                             FirstName = _faker.Name.FirstName(),
                             LastName = _faker.Name.LastName(),
                             Patronymic = _faker.Internet.UserName(),

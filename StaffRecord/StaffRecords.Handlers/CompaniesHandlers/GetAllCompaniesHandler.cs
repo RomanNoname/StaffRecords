@@ -17,11 +17,11 @@ namespace StaffRecords.Handlers.CompaniesHandlers
             _companyRepository = companyRepository;
         }
 
-        public Task<IEnumerable<GetCompanyResponse>> Handle(GetAllCompaniesRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetCompanyResponse>> Handle(GetAllCompaniesRequest request, CancellationToken cancellationToken)
         {
-            var result = _companyRepository.GetAll();
+            var result = await _companyRepository.GetAllAsync();
 
-            return Task.FromResult(_mapper.Map<IEnumerable<GetCompanyResponse>>(result));
+            return _mapper.Map<IEnumerable<GetCompanyResponse>>(result);
         }
     }
 }

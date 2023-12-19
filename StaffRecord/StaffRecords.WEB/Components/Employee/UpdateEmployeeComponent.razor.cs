@@ -20,7 +20,7 @@ namespace StaffRecords.WEB.Components.Employee
         private async void HandleValidSubmit()
         {
             await EmployeeRequests.UpdateEmployeeAsync(Model);
-            MudDialog.Cancel();
+            MudDialog!.Close();
         }
 
         private void Cancel()

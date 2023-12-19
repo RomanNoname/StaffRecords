@@ -11,15 +11,15 @@ namespace StaffRecords.Handlers.EmployeesHandlers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
         public GetEmployeesBySearchHandler(IEmployeeRepository employeeRepository, IMapper mapper)
-        { 
+        {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
-        public Task<IEnumerable<GetEmployeeResponse>> Handle(GetEmployeesBySearchRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetEmployeeResponse>> Handle(GetEmployeesBySearchRequest request, CancellationToken cancellationToken)
         {
-            var result = _employeeRepository.GetEmployeesBySearch(request.QueryString);
+            var result = await _employeeRepository.GetEmployeesBySearchAsync(request.QueryString);
 
-            return Task.FromResult(_mapper.Map<IEnumerable<GetEmployeeResponse>>(result));
+            return _mapper.Map<IEnumerable<GetEmployeeResponse>>(result);
         }
     }
 }
