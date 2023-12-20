@@ -119,6 +119,18 @@ namespace StaffRecords.Repository.Implementation.Repositories
                 parameters.Add("@SalaryTo", queryString.SalaryTo.Value);
             }
 
+            if (queryString.DateHireFrom.HasValue)
+            {
+                baseQuery += $" AND {GetTableName<Employee>()}.{nameof(Employee.HireDate)} >= @DateHireFrom ";
+                parameters.Add("@DateHireFrom", queryString.DateHireFrom.Value);
+            }
+
+            if (queryString.DateHireTo.HasValue)
+            {
+                baseQuery += $" AND {GetTableName<Employee>()}.{nameof(Employee.HireDate)} <= @DateHireTo ";
+                parameters.Add("@DateHireTo", queryString.DateHireTo.Value);
+            }
+
             return baseQuery;
         }
 

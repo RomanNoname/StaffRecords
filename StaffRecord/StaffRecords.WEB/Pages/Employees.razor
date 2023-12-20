@@ -12,9 +12,15 @@
     <MudTextField @bind-Value="_employeeQueryParams.DepartmentName" MaxLength="100" Label="Відділ" Variant="Variant.Filled"></MudTextField>
 </div>
 <br />
-<div>
-    <MudTextField @bind-Value="_employeeQueryParams.SalaryFrom" style="max-width: 25%;" Label="Зарплата ВІД" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
-    <MudTextField @bind-Value="_employeeQueryParams.SalaryTo" style="max-width: 25%;" Label="Зарплата ДО" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
+<div style="display: flex;">
+    <div>
+        <MudTextField @bind-Value="_employeeQueryParams.SalaryFrom" Label="Зарплата ВІД" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
+        <MudTextField @bind-Value="_employeeQueryParams.SalaryTo"  Label="Зарплата ДО" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" TextChanged="ValidateSalaries" />
+    </div>
+    <div style="margin-left: 50px;">
+        <MudDatePicker Label="Дата найму ВІД" Date="@_employeeQueryParams.DateHireFrom" DateChanged="HandleFromDateChanged" DateFormat="dd.MM.yyyy" />
+        <MudDatePicker Label="Дата найму ДО" Date="@_employeeQueryParams.DateHireTo" DateChanged="HandleToDateChanged" DateFormat="dd.MM.yyyy" />
+    </div>
 </div>
 <br />
 <div style="display: flex; align-items: center;">

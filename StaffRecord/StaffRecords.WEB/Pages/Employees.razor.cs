@@ -13,7 +13,7 @@ using System.Text;
 
 namespace StaffRecords.WEB.Pages
 {
-    public partial class Employees : ComponentBase
+    public partial class Employees : Microsoft.AspNetCore.Components.ComponentBase
     {
         [Inject] public IEmployeeRequests EmployeeRequests { get; set; } = default!;
         [Inject] public ICompanyRequests CompanyRequests { get; set; } = default!;
@@ -116,7 +116,25 @@ namespace StaffRecords.WEB.Pages
         private async Task GetTotalSalaryAsync()
         {
             _totalSalary = await EmployeeRequests.GetEmployeesTotalSalaryAsync(_employeeQueryParams);
+        }
+
+        private void HandleToDateChanged(DateTime? toDate)
+        {
+            _employeeQueryParams.DateHireTo = toDate;
+            if (_employeeQueryParams.DateHireFrom.HasValue && toDate.HasValue && toDate < _employeeQueryParams.DateHireFrom)
+            {
+                _employeeQueryParams.DateHireFrom = toDate;
+            }
 
         }
+        private void HandleFromDateChanged(DateTime? fromDate)
+        {
+            _employeeQueryParams.DateHireFrom = fromDate;
+            if (_employeeQueryParams.DateHireTo.HasValue && fromDate.HasValue && _employeeQueryParams.DateHireTo < fromDate)
+            {
+                _employeeQueryParams.DateHireTo = fromDate;
+            }
+        }
+
     }
 }

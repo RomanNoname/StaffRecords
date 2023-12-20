@@ -9,5 +9,8 @@
         public decimal? SalaryFrom { get; set; }
 
         public decimal? SalaryTo { get; set; }
+
+        public DateTime? DateHireFrom { get; set; }
+        public DateTime? DateHireTo { get; set; }
     }
 }
