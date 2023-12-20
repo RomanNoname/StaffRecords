@@ -338,7 +338,7 @@ namespace StaffRecords.DataInitialisation
                     LastName = _faker.Name.LastName().Replace("'", string.Empty),
                     Patronymic = _faker.Internet.UserName().Replace("'", string.Empty),
                     PhoneNumber = $"{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}{_faker.Random.Int(0, 9)}1222333444",
-                    Address = _faker.Address.StreetAddress(),
+                    Address = _faker.Address.StreetAddress().Replace("'", string.Empty),
                     DepartmentId = deparmentGuids[_faker.Random.Int(0, deparmentGuids.Count() - 1)],
                     AppointmentId = appointmentGuids[_faker.Random.Int(0, appointmentGuids.Count() - 1)],
                     CompanyId = companyGuids[_faker.Random.Int(0, companyGuids.Count() - 1)],
