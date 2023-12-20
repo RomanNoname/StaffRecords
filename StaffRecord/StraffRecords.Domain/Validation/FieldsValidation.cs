@@ -27,7 +27,9 @@
             public const int PhoneNumberMaxLength = 13;
             public const decimal MinSalary = 0;
             public const decimal MaxSalary = 200000;
+            public const int MinAgeToHire = 16;
+            public const int MaxAgeToHire = 80;
         }
-
+       
     }
 }

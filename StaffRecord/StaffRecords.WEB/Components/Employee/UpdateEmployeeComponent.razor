@@ -13,9 +13,9 @@
             <MudTextField @bind-Value="Model.PhoneNumber" MaxLength="FieldsValidation.Employee.PhoneNumberMaxLength" InputType="InputType.Number" Label="Номер телефону" For="@(() => Model.PhoneNumber)" Variant="Variant.Text"></MudTextField>
             <MudTextField @bind-Value="Model.Salary" InputType="InputType.Number" min="@FieldsValidation.Employee.MinSalary" max="@FieldsValidation.Employee.MaxSalary" Label="Заробітна плата" For="@(() => Model.Salary)" Variant="Variant.Text"></MudTextField>
             <MudDatePicker Label="Дата народження" Date="Model.DateOfBirth"
-                           MinDate="DateTime.UtcNow.AddYears(-100)" MaxDate="DateTime.UtcNow.AddYears(-16)" DateChanged="SetDateOfBirth" DateFormat="dd.MM.yyyy" Placeholder="Виберіть дату" />
+                           MinDate="DateTime.UtcNow.AddYears(-FieldsValidation.Employee.MaxAgeToHire)"  MaxDate="DateTime.UtcNow.AddYears(-FieldsValidation.Employee.MinAgeToHire)" DateChanged="SetDateOfBirth" DateFormat="dd.MM.yyyy" Placeholder="Виберіть дату" />
             <MudDatePicker Label="Дата найму" Date="Model.HireDate"
-                           MinDate="DateTime.UtcNow.AddYears(-70)" MaxDate="DateTime.UtcNow" DateChanged="SetDateOfHire" Placeholder="Виберіть дату" />
+                           MinDate="DateTime.UtcNow.AddYears(-FieldsValidation.Employee.MaxAgeToHire + 1)" MaxDate="DateTime.UtcNow" DateChanged="SetDateOfHire" Placeholder="Виберіть дату" />
             <MudSelect @bind-Value="Model.DepartmentId" Label="Відділ" T="Guid">
                 @foreach(var item in DeparmentDTOs)
                 {
