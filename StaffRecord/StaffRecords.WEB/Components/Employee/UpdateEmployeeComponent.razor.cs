@@ -22,7 +22,14 @@ namespace StaffRecords.WEB.Components.Employee
             StateHasChanged();
         }
 
-
+        private async void SetDateOfBirth(DateTime? dateTime)
+        {
+            Model.DateOfBirth = dateTime.Value;
+        }
+        private async void SetDateOfHire(DateTime? dateTime)
+        {
+            Model.HireDate = dateTime.Value;
+        }
         private async void HandleValidSubmit()
         {
             await EmployeeRequests.UpdateEmployeeAsync(Model);

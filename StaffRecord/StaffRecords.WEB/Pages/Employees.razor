@@ -1,4 +1,5 @@
 ﻿@page "/employees"
+@using StaffRecords.WEB.DTO.Employee
 
 <PageTitle>Працівники</PageTitle>
 
@@ -33,14 +34,24 @@ else
 {
     <MudTable Items="@_employees" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
-            <MudTh Class="column-spacing">Ім'я</MudTh>
-            <MudTh Class="column-spacing">Прізвище</MudTh>
+           <MudTh Class="column-spacing">
+                <MudTableSortLabel SortBy="new Func<EmployeeDTO, object>(x=>x.FirstName)">Ім'я</MudTableSortLabel>
+            </MudTh>
+            <MudTh Class="column-spacing">
+                <MudTableSortLabel SortBy="new Func<EmployeeDTO, object>(x=>x.LastName)">Прізвище</MudTableSortLabel>
+            </MudTh>
             <MudTh Class="column-spacing">По-батькові</MudTh>
             <MudTh Class="column-spacing">Адреса</MudTh>
             <MudTh Class="column-spacing">Номер телефону</MudTh>
-            <MudTh Class="column-spacing">Дата народження</MudTh>
-            <MudTh Class="column-spacing">Дата прийнятяя</MudTh>
-            <MudTh Class="column-spacing">Заробітня плата</MudTh>
+            <MudTh Class="column-spacing">
+                <MudTableSortLabel SortBy="new Func<EmployeeDTO, object>(x=>x.DateOfBirth)">Дата народження</MudTableSortLabel>
+            </MudTh>
+            <MudTh Class="column-spacing">
+                <MudTableSortLabel SortBy="new Func<EmployeeDTO, object>(x=>x.HireDate)">Дата прийнятяя</MudTableSortLabel>
+            </MudTh>
+            <MudTh Class="column-spacing">
+                <MudTableSortLabel SortBy="new Func<EmployeeDTO, object>(x=>x.Salary)">Заробітня плата</MudTableSortLabel>
+            </MudTh>
             <MudTh Class="column-spacing">Компанія</MudTh>
             <MudTh Class="column-spacing">Відділ</MudTh>
             <MudTh Class="column-spacing">Посада</MudTh>
